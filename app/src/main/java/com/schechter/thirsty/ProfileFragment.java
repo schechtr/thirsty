@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +22,9 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class ProfileFragment extends Fragment {
 
+    Button btn_logout;
+    Button btn_login;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -30,31 +34,59 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(getActivity(), LoginMasterActivity.class);
+            startActivity(intent);
+        }
+
+
         return inflater.inflate(R.layout.fragment_profile, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.btn_profile_login).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), LoginMasterActivity.class);
-                startActivity(intent);
-                return;
-            }
-        });
-
-
+        btn_logout = view.findViewById(R.id.btn_logout);
+        btn_login = view.findViewById(R.id.btn_login);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user == null) {
-            Intent intent = new Intent(getActivity(), LoginMasterActivity.class);
-            startActivity(intent);
-            return;
+        if (user != null) {
+            btn_logout.setVisibility(View.VISIBLE);
+            btn_login.setVisibility(View.INVISIBLE);
+
+            btn_logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseAuth.getInstance().signOut();
+                    btn_logout.setVisibility(View.INVISIBLE);
+                    btn_login.setVisibility(View.VISIBLE);
+
+
+                    MapFragment mapFragment = new MapFragment();
+                    getFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
+                            mapFragment).commit();
+
+                }
+            });
+
         }
 
+        if(user == null) {
+            btn_logout.setVisibility(View.INVISIBLE);
+            btn_login.setVisibility(View.VISIBLE);
 
-
+            btn_login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), LoginMasterActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
+
+
 }

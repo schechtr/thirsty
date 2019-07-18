@@ -5,12 +5,33 @@
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
-
+    <!-- DEBUG OPTION
     <Button
         android:id="@+id/btn_profile_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="enter login activity" />
+     -->
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/login_buttons_margin"
+        android:background="@drawable/btn_login_bg"
+        android:text="logout"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/login_buttons_margin"
+        android:background="@drawable/btn_login_bg"
+        android:text="login"
+        android:textColor="@android:color/white" />
 
 
 </FrameLayout>

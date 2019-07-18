@@ -55,18 +55,24 @@ public class LoginMasterActivity extends AppCompatActivity {
 
 
 
-
-
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final String email = mEmail.getText().toString();
                 final String password = mPassword.getText().toString();
+
+                progressBar.setVisibility(View.VISIBLE);
+
                 mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginMasterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressBar.setVisibility(View.INVISIBLE);
                         if(!task.isSuccessful())
                             Toast.makeText(LoginMasterActivity.this,"sign in error", Toast.LENGTH_SHORT).show();
+                        else if(task.isSuccessful())
+                            finish();
+
+
                     }
                 });
             }
@@ -75,6 +81,23 @@ public class LoginMasterActivity extends AppCompatActivity {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final String email = mEmail.getText().toString();
+                final String password = mPassword.getText().toString();
+
+                progressBar.setVisibility(View.VISIBLE);
+
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(LoginMasterActivity.this ,new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        if(!task.isSuccessful())
+                            Toast.makeText(LoginMasterActivity.this,"sign up error", Toast.LENGTH_SHORT).show();
+                        else {
+                            //String user_id = mAuth.getCurrentUser().getUid();
+                            finish();
+                        }
+                    }
+                });
 
             }
         });
@@ -148,18 +171,13 @@ public class LoginMasterActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            String photo = String.valueOf(user.getPhotoUrl());
-
-          /*  text.append("Info : \n");
-            text.append(name + "\n");
-            text.append(email);
-            Picasso.with(LoginActivity.this).load(photo).into(image);*/
+            btn_login.setVisibility(View.INVISIBLE);
+            btn_register.setVisibility(View.INVISIBLE);
             btn_google_login.setVisibility(View.INVISIBLE);
         } else {
-           /* text.setText("Firebase Login \n");
-            Picasso.with(LoginActivity.this).load(R.drawable.ic_firebase_logo).into(image);*/
+
+            btn_login.setVisibility(View.VISIBLE);
+            btn_register.setVisibility(View.VISIBLE);
             btn_google_login.setVisibility(View.VISIBLE);
         }
     }

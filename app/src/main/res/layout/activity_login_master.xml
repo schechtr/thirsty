@@ -10,10 +10,10 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/colorPrimary"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary" />
 
-         />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -49,9 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
-        />
+        android:layout_marginBottom="20dp" />
 
 
     <Button
@@ -72,19 +71,26 @@
         android:text="Create an Account"
         android:textColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/btn_google_sign_in"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/login_buttons_margin"
-        android:background="@drawable/btn_login_bg"
-        android:drawableStart="@drawable/ic_google_login"
-        android:paddingRight="42dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/btn_google_login"
-        android:textColor="@android:color/white"
+        android:layout_height="80dp">
 
-        />
+        <Button
+            android:id="@+id/btn_google_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/login_buttons_margin"
+            android:layout_marginEnd="@dimen/login_buttons_margin"
+            android:layout_marginBottom="20dp"
+
+
+            android:background="@drawable/btn_login_bg"
+            android:drawableStart="@drawable/ic_google_login"
+            android:paddingRight="42dp"
+            android:text="@string/btn_google_login"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>
