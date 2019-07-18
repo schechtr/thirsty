@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "146360907973",
+    "firebase_url": "https://thirsty-be693.firebaseio.com",
+    "project_id": "thirsty-be693",
+    "storage_bucket": "thirsty-be693.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146360907973:android:d2b41b84d6c22b18",
+        "android_client_info": {
+          "package_name": "com.schechter.thirsty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "146360907973-tfo31jlublntt9bhof6t8cu40p876e9i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.schechter.thirsty",
+            "certificate_hash": "77b0884dbda81befa0353edf2bc41eb6a0d96fa3"
+          }
+        },
+        {
+          "client_id": "146360907973-p0d859ojl6e98hvsdmq3rg85ekfim8pm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwMLLKr4aMaPrkdD69e3E3SaCu81QLv1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "146360907973-p0d859ojl6e98hvsdmq3rg85ekfim8pm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_map"
+            android:title="@string/menu_map" />
+        <item
+            android:id="@+id/nav_starred"
+            android:icon="@drawable/ic_star"
+            android:title="@string/menu_starred" />
+        <item
+        android:id="@+id/nav_visited"
+        android:icon="@drawable/ic_pin_drop"
+        android:title="@string/menu_visited" />
+        <item
+            android:id="@+id/nav_contributed"
+            android:icon="@drawable/ic_add_location"
+            android:title="@string/menu_contributed" />
+
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_profile_circle"
+            android:title="@string/menu_profile" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/menu_share" />
+            // needs a better icon
+            <item
+                android:id="@+id/nav_rate"
+                android:icon="@drawable/ic_star_border"
+                android:title="@string/menu_rate" />
+            <item
+                android:id="@+id/nav_contact_us"
+                android:icon="@drawable/ic_contact_us"
+                android:title="@string/menu_contact_us" />
+
+        </menu>
+    </item>
+
+</menu>
