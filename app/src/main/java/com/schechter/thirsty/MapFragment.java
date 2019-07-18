@@ -34,6 +34,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.clustering.ClusterManager;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -55,15 +59,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_maps, container, false);
-
-
 
 
         return v;
@@ -74,13 +74,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
 
 
-
-
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
     }
 
@@ -89,6 +85,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
+
+        // set up clustering
+        setUpClusterManager(googleMap);
 
         mLocationRequest = new LocationRequest();
        // mLocationRequest.setInterval(1000);
@@ -126,6 +125,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(locationButton != null) {
             locationButton.setVisibility(View.GONE);
         }
+    }
+
+    private void setUpClusterManager(GoogleMap googleMap) {
+        ClusterManager<MarkerItem> clusterManager = new ClusterManager<>(getContext(), googleMap);
+        clusterManager.setRenderer(new MarkerClusterRenderer(getContext(), googleMap, clusterManager));
+        googleMap.setOnCameraIdleListener(clusterManager);
+        List<MarkerItem> items = getItems();
+        clusterManager.addItems(items);
+        clusterManager.cluster();
+    }
+
+    private List<MarkerItem> getItems() {
+        return Arrays.asList(
+                new MarkerItem(new LatLng(-31.563910, 147.154312)),
+                new MarkerItem(new LatLng(-32.563910, 147.154312)),
+                new MarkerItem(new LatLng(-33.563910, 147.154312)),
+                new MarkerItem(new LatLng(-34.563910, 147.154312)),
+                new MarkerItem(new LatLng(-31.563910, 148.154312)),
+                new MarkerItem(new LatLng(-31.563910, 146.154312)),
+                new MarkerItem(new LatLng(-31.563910, 145.154312)),
+                new MarkerItem(new LatLng(-31.563910, 144.154312)),
+                new MarkerItem(new LatLng(-31.563910, 143.154312)),
+                new MarkerItem(new LatLng(-31.563910, 142.154312)),
+                new MarkerItem(new LatLng(-31.563910, 141.154312)),
+                new MarkerItem(new LatLng(-31.563910, 140.154312)),
+                new MarkerItem(new LatLng(-31.563910, 149.154312)),
+                new MarkerItem(new LatLng(-31.963910, 147.154312)),
+                new MarkerItem(new LatLng(-31.563910, 146.954312)),
+                new MarkerItem(new LatLng(-32.163910, 147.154312)),
+                new MarkerItem(new LatLng(-33.963910, 147.854312)),
+                new MarkerItem(new LatLng(-32.563910, 147.754312))
+        );
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
