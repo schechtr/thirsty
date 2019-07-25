@@ -20,6 +20,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            >
+
+
+
+            <fragment android:id="@+id/autocomplete_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                />
+        </androidx.cardview.widget.CardView>
+
+
+
         <ImageButton
             android:id="@+id/btn_current_location"
             android:layout_width="wrap_content"
@@ -31,6 +48,7 @@
             android:background="@drawable/btn_selector"
             android:clickable="true"
             android:padding="5dp"
+
             android:scaleType="fitCenter"
             android:src="@android:drawable/ic_menu_mylocation"
             android:tint="#FFFFFF"
@@ -51,7 +69,6 @@
             android:src="@drawable/ic_add_location"
             android:tint="#FFFFFF"
             tools:src="@drawable/ic_add_location" />
-
 
 
 

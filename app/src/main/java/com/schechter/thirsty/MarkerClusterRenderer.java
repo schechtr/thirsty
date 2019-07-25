@@ -37,15 +37,15 @@ public class MarkerClusterRenderer extends DefaultClusterRenderer<MarkerItem> {
         iconGenerator.setContentView(markerImageView);
     }
 
+
+
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
-        Drawable background = ContextCompat.getDrawable(context, R.drawable.ic_blue_pin_48dp);
+        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
         Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         background.draw(canvas);
-        vectorDrawable.draw(canvas);
+
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
@@ -55,7 +55,7 @@ public class MarkerClusterRenderer extends DefaultClusterRenderer<MarkerItem> {
 
         //markerImageView.setImageResource(R.drawable.ic_map);
         //Bitmap icon = iconGenerator.makeIcon();
-        markerOptions.icon(bitmapDescriptorFromVector(mContext, R.drawable.ic_circle));
+        markerOptions.icon(bitmapDescriptorFromVector(mContext, R.drawable.custom_marker));
         markerOptions.title(item.getTitle());
     }
 }
