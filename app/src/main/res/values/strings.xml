@@ -25,6 +25,8 @@
 
     <string name="api_key">AIzaSyAjo-XEvFEE6PBQRByCYhu9yz5jEf1cv2Q</string>
 
+    <string name="intent_key">intent_key</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

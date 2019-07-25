@@ -18,13 +18,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, IMainActivity {
 
+    private static final String TAG = "MainActivity";
+    
+    
     private DrawerLayout drawer;
 
     @Override
@@ -155,4 +160,34 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
+    /*** Communication with IMainActivity Interface ***/
+
+    private void doFragmentTransaction(Fragment fragment, String message) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+
+        if(message != ""){
+            Bundle bundle = new Bundle();
+            bundle.putString(getString(R.string.intent_key), message);
+            fragment.setArguments(bundle);
+        }
+
+        transaction.commit();
+    }
+
+
+    @Override
+    public void sendMarkerID(Fragment fragment, String ID) {
+
+
+
+        doFragmentTransaction(fragment, ID);
+
+    }
+
+
+
 }

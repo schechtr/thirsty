@@ -2,6 +2,7 @@ package com.schechter.thirsty;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,10 +70,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Place mPlace;
     private FusedLocationProviderClient mFusedLocationClient;
     private SupportMapFragment mapFragment;
+    private MarkerDetailFragment markerDetailFragment;
     private View locationButton;
     private ImageButton myLocationButton;
     private AutocompleteSupportFragment autocompleteFragment;
     private PlacesClient placesClient;
+
+    // Marker ID Communication to MarkerDetailFragment
+    private String outgoingMarkerID;
+    private IMainActivity iMainActivity;
+
+
     LocationRequest mLocationRequest;
     Location mLastLocation;
 
@@ -80,6 +89,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        iMainActivity = (IMainActivity) getActivity();
+    }
 
     /*** limit the amount of computation done in this method, and use onViewCreated for the rest ***/
     @Override
@@ -104,9 +119,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.autocomplete_fragment);
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));*/
 
+        markerDetailFragment = (MarkerDetailFragment) getFragmentManager()
+                .findFragmentById(R.id.marker_detail);
+
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
 
     }
@@ -161,7 +178,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
 
-
         /*** setup for autocomplete places api ***/
 
         if (!Places.isInitialized()) {
@@ -188,7 +204,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 //autocompleteFragment.setHint(mPlace.getAddress());
 
-               // ((EditText) getView().findViewById(R.id.places_autocomplete_search_input)).setText(place.getAddress());
+                // ((EditText) getView().findViewById(R.id.places_autocomplete_search_input)).setText(place.getAddress());
 
             }
 
@@ -201,6 +217,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         });
 
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Log.d("marker", "map clicked");
+
+                if (getChildFragmentManager().getBackStackEntryCount() > 0) {
+                    Log.d("marker", "popping backstack");
+                    getChildFragmentManager().popBackStack();
+                }
+            }
+        });
 
 
     }
@@ -217,7 +244,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public boolean onClusterItemClick(MarkerItem markerItem) {
 
-                Log.d("marker clicked", "Marker clicked");
+                Log.d("marker", "Marker clicked");
+
+                MarkerDetailFragment markerDetailFragment = new MarkerDetailFragment();
+
+                getChildFragmentManager().beginTransaction().replace(R.id.marker_detail_container,
+                        markerDetailFragment).addToBackStack(null).commit();
+
+                iMainActivity.sendMarkerID(markerDetailFragment, "hello there");
+
+
+                Log.d("marker", markerItem.getPosition().latitude + "," + markerItem.getPosition().longitude);
 
                 return true;
             }
@@ -226,13 +263,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.setOnMarkerClickListener(clusterManager);
 
 
-
     }
 
     /*** list which serves as the database for drawing pins on the map ***/
     private List<MarkerItem> getItems() {
         return Arrays.asList(
 
+                new MarkerItem(new LatLng(37.4220, -122.0950)),
                 new MarkerItem(new LatLng(33.628671, -117.657340)),
                 new MarkerItem(new LatLng(-32.563910, 147.154312)),
                 new MarkerItem(new LatLng(-33.563910, 147.154312)),
