@@ -22,7 +22,7 @@ public class MarkerDetailFragment extends Fragment {
 
     private String incomingMarkerID = "";
     private IMainActivity iMainActivity;
-    private String markerID;
+    //private String markerID;
 
     public MarkerDetailFragment() {
         // Required empty public constructor
@@ -63,7 +63,9 @@ public class MarkerDetailFragment extends Fragment {
         if(incomingMarkerID != "") {
             Log.d("marker", incomingMarkerID);
 
-            markerID = incomingMarkerID;
+            final String markerID = incomingMarkerID;
+
+            setupUI(markerID);
         }
 
 
@@ -73,6 +75,12 @@ public class MarkerDetailFragment extends Fragment {
                 Log.d("marker", "detail view clicked");
             }
         });
+
+    }
+
+    private void setupUI(String markerID) {
+
+        
 
     }
 

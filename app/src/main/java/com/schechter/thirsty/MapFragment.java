@@ -54,8 +54,14 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.ClusterManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -66,6 +72,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     /*** member variables ***/
+
+
+
+
     private GoogleMap mMap;
     private Place mPlace;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -75,6 +85,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ImageButton myLocationButton;
     private AutocompleteSupportFragment autocompleteFragment;
     private PlacesClient placesClient;
+
+    // Firebase database
+    private DatabaseReference mDatabaseReference;
+    private List<MarkerItem> markerItemList;
 
     // Marker ID Communication to MarkerDetailFragment
     private String outgoingMarkerID;
@@ -114,11 +128,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
-
-      /*  autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager()
-                .findFragmentById(R.id.autocomplete_fragment);
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));*/
-
         markerDetailFragment = (MarkerDetailFragment) getFragmentManager()
                 .findFragmentById(R.id.marker_detail);
 
@@ -138,8 +147,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mMap = googleMap;
 
-        // set up clustering
-        setUpClusterManager(googleMap);
+        // set up clustering and read from database
+        loadFirebaseMapData();
+
 
         mLocationRequest = new LocationRequest();
         // mLocationRequest.setInterval(1000);
@@ -171,7 +181,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-
         locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
         if (locationButton != null) {
             locationButton.setVisibility(View.GONE);
@@ -251,7 +260,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 getChildFragmentManager().beginTransaction().replace(R.id.marker_detail_container,
                         markerDetailFragment).addToBackStack(null).commit();
 
-                iMainActivity.sendMarkerID(markerDetailFragment, "hello there");
+
+
+                iMainActivity.sendMarkerID(markerDetailFragment, markerItem.getID());
 
 
                 Log.d("marker", markerItem.getPosition().latitude + "," + markerItem.getPosition().longitude);
@@ -262,34 +273,51 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         googleMap.setOnMarkerClickListener(clusterManager);
 
-
     }
+
 
     /*** list which serves as the database for drawing pins on the map ***/
     private List<MarkerItem> getItems() {
-        return Arrays.asList(
+        return markerItemList;
 
-                new MarkerItem(new LatLng(37.4220, -122.0950)),
-                new MarkerItem(new LatLng(33.628671, -117.657340)),
-                new MarkerItem(new LatLng(-32.563910, 147.154312)),
-                new MarkerItem(new LatLng(-33.563910, 147.154312)),
-                new MarkerItem(new LatLng(-34.563910, 147.154312)),
-                new MarkerItem(new LatLng(-31.563910, 148.154312)),
-                new MarkerItem(new LatLng(-31.563910, 146.154312)),
-                new MarkerItem(new LatLng(-31.563910, 145.154312)),
-                new MarkerItem(new LatLng(-31.563910, 144.154312)),
-                new MarkerItem(new LatLng(-31.563910, 143.154312)),
-                new MarkerItem(new LatLng(-31.563910, 142.154312)),
-                new MarkerItem(new LatLng(-31.563910, 141.154312)),
-                new MarkerItem(new LatLng(-31.563910, 140.154312)),
-                new MarkerItem(new LatLng(-31.563910, 149.154312)),
-                new MarkerItem(new LatLng(-31.963910, 147.154312)),
-                new MarkerItem(new LatLng(-31.563910, 146.954312)),
-                new MarkerItem(new LatLng(-32.163910, 147.154312)),
-                new MarkerItem(new LatLng(-33.963910, 147.854312)),
-                new MarkerItem(new LatLng(-32.563910, 147.754312))
-        );
     }
+
+    private void loadFirebaseMapData() {
+
+        markerItemList = new ArrayList<>();
+
+        // start point for data access
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Markers");
+
+        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                // iterate through marker id's
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+
+                    String id = (String) child.child("id").getValue();
+                    double lat = (double) child.child("latitude").getValue();
+                    double lng = (double) child.child("longitude").getValue();
+
+                    Log.d(TAG, "get items marker 1:" + lat + ", " + lng);
+                    markerItemList.add(new MarkerItem(id, new LatLng(lat, lng)));
+
+                }
+
+                setUpClusterManager(mMap);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: marker, database error");
+
+            }
+        });
+
+
+    }
+
 
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
