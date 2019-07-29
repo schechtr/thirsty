@@ -54,6 +54,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -74,17 +75,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     /*** member variables ***/
 
 
-
-
     private GoogleMap mMap;
     private Place mPlace;
     private FusedLocationProviderClient mFusedLocationClient;
+    private PlacesClient placesClient;
+
+    // Buttons and fragments
     private SupportMapFragment mapFragment;
     private MarkerDetailFragment markerDetailFragment;
+    private AddNewLocationFragment addNewLocationFragment;
     private View locationButton;
-    private ImageButton myLocationButton;
+    private FloatingActionButton btn_current_location, btn_add;
     private AutocompleteSupportFragment autocompleteFragment;
-    private PlacesClient placesClient;
+
 
     // Firebase database
     private DatabaseReference mDatabaseReference;
@@ -92,6 +95,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     // Marker ID Communication to MarkerDetailFragment
     private String outgoingMarkerID;
+    // general communication
     private IMainActivity iMainActivity;
 
 
@@ -106,7 +110,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         iMainActivity = (IMainActivity) getActivity();
     }
 
@@ -115,10 +118,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_maps, container, false);
+        return inflater.inflate(R.layout.fragment_maps, container, false);
 
-
-        return v;
     }
 
     @Override
@@ -130,10 +131,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         markerDetailFragment = (MarkerDetailFragment) getFragmentManager()
                 .findFragmentById(R.id.marker_detail);
+        addNewLocationFragment = (AddNewLocationFragment) getFragmentManager()
+                .findFragmentById(R.id.add_new_location);
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
     }
 
@@ -170,8 +172,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         /*** setup custom current location button ***/
-        myLocationButton = (ImageButton) getView().findViewById(R.id.btn_current_location);
-        myLocationButton.setOnClickListener(new View.OnClickListener() {
+        btn_current_location = getView().findViewById(R.id.btn_current_location);
+        btn_current_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mMap != null) {
@@ -185,6 +187,42 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (locationButton != null) {
             locationButton.setVisibility(View.GONE);
         }
+
+        /*** setup add new fountain button ***/
+        btn_add = getView().findViewById(R.id.btn_add);
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMap != null) {
+
+                    Log.d(TAG, "onClick: add button clicked!");
+
+                    // get current location
+                    final LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+                    // zoom into location
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(20));
+
+
+                    // hide fab's
+                    btn_add.hide();
+                    btn_current_location.hide();
+
+
+                    // launch new fragment
+                    addNewLocationFragment = new AddNewLocationFragment();
+                    getChildFragmentManager().beginTransaction().replace(R.id.add_new_location_container,
+                            addNewLocationFragment).addToBackStack(null).commit();
+
+
+                    iMainActivity.sendCurrentLocation(addNewLocationFragment, latLng);
+
+                }
+            }
+        });
 
 
         /*** setup for autocomplete places api ***/
@@ -234,6 +272,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 if (getChildFragmentManager().getBackStackEntryCount() > 0) {
                     Log.d("marker", "popping backstack");
                     getChildFragmentManager().popBackStack();
+
+                    btn_add.show();
+                    btn_current_location.show();
+
                 }
             }
         });
@@ -255,11 +297,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 Log.d("marker", "Marker clicked");
 
-                MarkerDetailFragment markerDetailFragment = new MarkerDetailFragment();
+                // get current location
+                final LatLng latLng = new LatLng(markerItem.getPosition().latitude,
+                        markerItem.getPosition().longitude);
 
+                // center on location
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+
+                markerDetailFragment = new MarkerDetailFragment();
                 getChildFragmentManager().beginTransaction().replace(R.id.marker_detail_container,
                         markerDetailFragment).addToBackStack(null).commit();
 
+                btn_add.hide();
+                btn_current_location.hide();
 
 
                 iMainActivity.sendMarkerID(markerDetailFragment, markerItem.getID());
@@ -287,7 +338,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         markerItemList = new ArrayList<>();
 
         // start point for data access
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Markers");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Locations");
 
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -296,11 +347,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 // iterate through marker id's
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
 
-                    String id = (String) child.child("id").getValue();
+                    String id = child.getKey();
                     double lat = (double) child.child("latitude").getValue();
                     double lng = (double) child.child("longitude").getValue();
 
-                    Log.d(TAG, "get items marker 1:" + lat + ", " + lng);
+                    Log.d(TAG, "get items marker 1:" + lat + ", " + lng + ", " + id);
                     markerItemList.add(new MarkerItem(id, new LatLng(lat, lng)));
 
                 }

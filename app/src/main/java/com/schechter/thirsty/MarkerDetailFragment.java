@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 
 /**
@@ -43,8 +44,8 @@ public class MarkerDetailFragment extends Fragment {
 
 
         Bundle bundle = this.getArguments();
-        if(bundle != null) {
-            incomingMarkerID = bundle.getString(getString(R.string.intent_key));
+        if (bundle != null) {
+            incomingMarkerID = bundle.getString(getString(R.string.marker_id_key));
         }
     }
 
@@ -60,7 +61,7 @@ public class MarkerDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        if(incomingMarkerID != "") {
+        if (incomingMarkerID != "") {
             Log.d("marker", incomingMarkerID);
 
             final String markerID = incomingMarkerID;
@@ -80,7 +81,6 @@ public class MarkerDetailFragment extends Fragment {
 
     private void setupUI(String markerID) {
 
-        
 
     }
 

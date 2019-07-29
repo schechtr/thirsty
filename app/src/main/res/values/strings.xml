@@ -25,7 +25,16 @@
 
     <string name="api_key">AIzaSyAjo-XEvFEE6PBQRByCYhu9yz5jEf1cv2Q</string>
 
-    <string name="intent_key">intent_key</string>
+    <string name="marker_id_key">marker_id_key</string>
+    <string name="latitude_key">latitude_key</string>
+    <string name="longitude_key">longitude_key</string>
+
+
+    <string-array name="options_array">
+        <item>Bottle Refill</item>
+        <item>Dog Bowl</item>
+
+    </string-array>
 
 
     <!-- TODO: Remove or change this placeholder text -->

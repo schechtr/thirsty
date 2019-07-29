@@ -37,47 +37,56 @@
 
         <!-- current location and add spot buttons -->
 
-        <ImageButton
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_current_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="12dp"
-            android:layout_marginBottom="115dp"
-            android:background="@drawable/btn_selector"
-            android:clickable="true"
-            android:padding="5dp"
-
+            android:layout_marginBottom="125dp"
             android:scaleType="fitCenter"
-            android:src="@android:drawable/ic_menu_mylocation"
-            android:tint="#FFFFFF"
-            tools:src="@android:drawable/ic_menu_mylocation" />
+            android:src="@drawable/ic_current_location"
+            app:backgroundTint="@color/colorPrimary"
+            android:tint="@android:color/white"
+            app:fabSize="normal"
 
-        <ImageButton
+            />
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btn_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="12dp"
-            android:layout_marginBottom="37dp"
-            android:background="@drawable/btn_add_selector"
-            android:clickable="true"
-            android:padding="8dp"
+            android:layout_marginBottom="45dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_add_location"
-            android:tint="#FFFFFF"
-            tools:src="@drawable/ic_add_location" />
+            android:src="@drawable/ic_add_location_alt"
+            android:tint="@android:color/white"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="normal" />
 
 
-
-        <!--- marker detail -->
+        <!--- marker detail container -->
         <FrameLayout
             android:id="@+id/marker_detail_container"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:animateLayoutChanges="true">
+
+        </FrameLayout>
+
+        <!--- new location container -->
+        <FrameLayout
+            android:id="@+id/add_new_location_container"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="true"
+            android:animateLayoutChanges="true">
 
         </FrameLayout>
 

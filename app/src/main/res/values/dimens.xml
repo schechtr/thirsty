@@ -6,4 +6,5 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="login_buttons_margin">8dp</dimen>
+    <dimen name="pin_size">42dp</dimen>
 </resources>

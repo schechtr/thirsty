@@ -2,9 +2,12 @@ package com.schechter.thirsty;
 
 import android.os.Bundle;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.os.Parcel;
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.view.GravityCompat;
@@ -28,8 +31,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IMainActivity {
 
     private static final String TAG = "MainActivity";
-    
-    
+
+
     private DrawerLayout drawer;
 
     @Override
@@ -41,13 +44,12 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         /** floating action button
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+         FloatingActionButton fab = findViewById(R.id.fab);
+         fab.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        .setAction("Action", null).show();
+        }
         }); **/
 
 
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         // set map as the default menu to open on launch
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
-                   new MapFragment()).commit();
+                    new MapFragment()).commit();
         }
 
 
@@ -162,18 +164,28 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     /*** Communication with IMainActivity Interface ***/
 
-    private void doFragmentTransaction(Fragment fragment, String message) {
+    private void doFragmentTransactionWithString(Fragment fragment, String key, String message) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
 
-        if(message != ""){
-            Bundle bundle = new Bundle();
-            bundle.putString(getString(R.string.intent_key), message);
-            fragment.setArguments(bundle);
-        }
+        Bundle bundle = new Bundle();
+        bundle.putString(key, message);
+        fragment.setArguments(bundle);
+
+
+        transaction.commit();
+    }
+
+    private void doFragmentTransactionWithDouble(Fragment fragment, String[] keys, Double[] values) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+
+        Bundle bundle = new Bundle();
+        bundle.putDouble(keys[0], values[0]);
+        bundle.putDouble(keys[1], values[1]);
+        fragment.setArguments(bundle);
 
         transaction.commit();
     }
@@ -182,12 +194,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void sendMarkerID(Fragment fragment, String ID) {
 
-
-
-        doFragmentTransaction(fragment, ID);
+        doFragmentTransactionWithString(fragment, getString(R.string.marker_id_key), ID);
 
     }
 
+    @Override
+    public void sendCurrentLocation(Fragment fragment, LatLng latLng) {
+
+        Log.d(TAG, "latitude in transmission: " + latLng.latitude);
+
+        String[] keys = {getString(R.string.latitude_key), getString(R.string.longitude_key)};
+        Double[] values = {latLng.latitude, latLng.longitude};
+
+        doFragmentTransactionWithDouble(fragment, keys, values);
+
+    }
 
 
 }

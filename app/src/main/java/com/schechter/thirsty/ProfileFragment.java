@@ -50,19 +50,33 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setupUI(view);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setupUI(getView());
+    }
+
+
+    private void setupUI(View view)
+    {
         btn_logout = view.findViewById(R.id.btn_logout);
         btn_login = view.findViewById(R.id.btn_login);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             btn_logout.setVisibility(View.VISIBLE);
-            btn_login.setVisibility(View.INVISIBLE);
+            btn_login.setVisibility(View.GONE);
 
             btn_logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     FirebaseAuth.getInstance().signOut();
-                    btn_logout.setVisibility(View.INVISIBLE);
-                    btn_login.setVisibility(View.VISIBLE);
+                    btn_logout.setVisibility(View.GONE);
+                    btn_login.setVisibility(View.GONE);
 
 
                     MapFragment mapFragment = new MapFragment();
@@ -75,7 +89,7 @@ public class ProfileFragment extends Fragment {
         }
 
         if(user == null) {
-            btn_logout.setVisibility(View.INVISIBLE);
+            btn_logout.setVisibility(View.GONE);
             btn_login.setVisibility(View.VISIBLE);
 
             btn_login.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +101,4 @@ public class ProfileFragment extends Fragment {
             });
         }
     }
-
-
 }

@@ -50,6 +50,14 @@ dependencies {
 
     // card view
     implementation 'androidx.cardview:cardview:1.0.0'
+
+
+    /*** 3rd party libraries */
+    // multi-state toggle button
+    implementation 'org.honorato.multistatetogglebutton:multistatetogglebutton:0.2.2'
+
+    // circular image view
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

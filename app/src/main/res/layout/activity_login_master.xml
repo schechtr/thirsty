@@ -44,6 +44,21 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="134dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="confirm password" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
@@ -69,6 +84,15 @@
         android:layout_margin="@dimen/login_buttons_margin"
         android:background="@drawable/btn_login_bg"
         android:text="Create an Account"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/btn_confirm_registration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/login_buttons_margin"
+        android:background="@drawable/btn_login_bg"
+        android:text="confirm registration"
         android:textColor="@android:color/white" />
 
     <RelativeLayout
