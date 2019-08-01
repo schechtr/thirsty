@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ProfileFragment">
 
     <!-- DEBUG OPTION
@@ -13,23 +14,25 @@
         android:text="enter login activity" />
      -->
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_logout"
+        app:backgroundTint="@color/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:layout_margin="@dimen/login_buttons_margin"
-        android:background="@drawable/btn_login_bg"
+        app:cornerRadius="50dp"
         android:text="logout"
         android:textColor="@android:color/white" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
+        app:cornerRadius="50dp"
+        app:backgroundTint="@color/colorPrimary"
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="@dimen/login_buttons_margin"
-        android:background="@drawable/btn_login_bg"
         android:text="login"
         android:textColor="@android:color/white" />
 

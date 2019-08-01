@@ -68,52 +68,60 @@
         android:layout_marginBottom="20dp" />
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_master_login"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_margin="@dimen/login_buttons_margin"
         android:background="@drawable/btn_login_bg"
         android:text="Login"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="50dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_master_register"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_margin="@dimen/login_buttons_margin"
         android:background="@drawable/btn_login_bg"
         android:text="Create an Account"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="50dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_confirm_registration"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_margin="@dimen/login_buttons_margin"
-        android:background="@drawable/btn_login_bg"
+
         android:text="confirm registration"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="50dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_google_sign_in"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="@dimen/login_buttons_margin"
             android:layout_marginEnd="@dimen/login_buttons_margin"
             android:layout_marginBottom="20dp"
-
-
-            android:background="@drawable/btn_login_bg"
-            android:drawableStart="@drawable/ic_google_login"
-            android:paddingRight="42dp"
+            app:iconTintMode="add"
+            app:iconTint="@android:color/transparent"
+            app:icon="@drawable/ic_google_login"
+            android:paddingRight="60dp"
+            app:iconSize="30dp"
             android:text="@string/btn_google_login"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            app:backgroundTint="@color/colorPrimary"
+            app:cornerRadius="50dp" />
     </RelativeLayout>
 
 

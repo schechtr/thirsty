@@ -1,6 +1,7 @@
 package com.schechter.thirsty;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.model.LatLng;
 

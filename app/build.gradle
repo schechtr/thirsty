@@ -34,6 +34,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.google.firebase:firebase-database:18.0.0'
     implementation 'com.google.firebase:firebase-auth:18.0.0'
+    implementation 'com.google.firebase:firebase-storage:18.1.1'
 
     //google maps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -58,6 +59,18 @@ dependencies {
 
     // circular image view
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+
+    // animated star button
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+
+
+    // glide stuff
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    //implementation 'com.firebaseui:firebase-ui-storage:4.3.1'
+    //implementation 'androidx.annotation:annotation:1.0.2'
+
 }
+
 
 apply plugin: 'com.google.gms.google-services'

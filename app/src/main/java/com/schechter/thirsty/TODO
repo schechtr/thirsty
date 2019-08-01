@@ -6,3 +6,6 @@
     https://stackoverflow.com/questions/7606995/how-to-apply-shape-and-selector-simultaneously-for-button
 
 - Forgot Password Button
+
+- Bug: app crashes when you try to add a new location before the current location data has been loaded
+    - solution: hide the button until that shit is available

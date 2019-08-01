@@ -79,6 +79,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Place mPlace;
     private FusedLocationProviderClient mFusedLocationClient;
     private PlacesClient placesClient;
+    private boolean mFirstRequest; // sketchy way of detecting the first request for locationCallback
 
     // Buttons and fragments
     private SupportMapFragment mapFragment;
@@ -134,9 +135,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         addNewLocationFragment = (AddNewLocationFragment) getFragmentManager()
                 .findFragmentById(R.id.add_new_location);
 
+        mFirstRequest = true;
+
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+    }
+
+
+    public void showFABs() {
+        btn_add.show();
+        btn_current_location.show();
     }
 
 
@@ -154,8 +163,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
         mLocationRequest = new LocationRequest();
-        // mLocationRequest.setInterval(1000);
-        // mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setInterval(1000); // location updates every second
+        mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         /*** check for location permission before proceeding ***/
@@ -213,10 +222,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
                     // launch new fragment
-                    addNewLocationFragment = new AddNewLocationFragment();
+                    addNewLocationFragment = new AddNewLocationFragment(MapFragment.this);
                     getChildFragmentManager().beginTransaction().replace(R.id.add_new_location_container,
                             addNewLocationFragment).addToBackStack(null).commit();
-
 
                     iMainActivity.sendCurrentLocation(addNewLocationFragment, latLng);
 
@@ -377,11 +385,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 if (mFusedLocationClient.getApplicationContext() != null) {
                     mLastLocation = location;
 
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    if (mFirstRequest) {
 
-                    // move the camera
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+                        // move the camera
+                        mMap.moveCamera(CameraUpdateFactory.
+                                newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+
+                        mFirstRequest = false; // well i guess it works...
+                    }
+
+
                 }
             }
         }

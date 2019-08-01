@@ -36,7 +36,7 @@
             // needs a better icon
             <item
                 android:id="@+id/nav_rate"
-                android:icon="@drawable/ic_star_border"
+                android:icon="@drawable/ic_star_outline"
                 android:title="@string/menu_rate" />
             <item
                 android:id="@+id/nav_contact_us"
