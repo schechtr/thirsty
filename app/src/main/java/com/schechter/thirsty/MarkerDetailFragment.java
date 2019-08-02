@@ -1,6 +1,7 @@
 package com.schechter.thirsty;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,7 +58,7 @@ public class MarkerDetailFragment extends Fragment {
     // props from database
     private boolean bottle_refill;
     private boolean dog_bowl;
-    private String databasePhotoURL;
+    private String databasePhotoURL = "";
     private Uri storagePhotoDownloadURI;
     //private StorageReference mImageStorageReference;
 
@@ -84,6 +86,7 @@ public class MarkerDetailFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,9 +100,26 @@ public class MarkerDetailFragment extends Fragment {
 
         typeChipGroup = view.findViewById(R.id.marker_detail_tags);
         marker_detail_photo = view.findViewById(R.id.marker_detail_photo);
+        marker_detail_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!databasePhotoURL.equals("")) {
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    final View photo_view_container = getLayoutInflater().inflate(R.layout.photo_view, null);
+                    builder.setView(photo_view_container);
+                    AlertDialog dialog = builder.create();
+
+                    PhotoView photoView = photo_view_container.findViewById(R.id.photo_view);
+                    Glide.with(getContext()).load(storagePhotoDownloadURI).into(photoView);
+                    dialog.show();
+
+                }
+            }
+        });
 
 
-        if (incomingMarkerID != "") {
+        if (!incomingMarkerID.equals("")) {
             Log.d("marker", incomingMarkerID);
 
             final String markerID = incomingMarkerID;
@@ -115,7 +135,12 @@ public class MarkerDetailFragment extends Fragment {
             }
         });
 
+
+
+
     }
+
+
 
     private void pullFirebaseData(final View view, String markerID) {
 
@@ -203,5 +228,6 @@ public class MarkerDetailFragment extends Fragment {
         }
 
     }
+
 
 }
