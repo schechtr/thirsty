@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimary"
+            android:background="@color/thatOneGrey"
             android:scaleType="fitXY">
 
         </ImageView>
@@ -37,7 +37,6 @@
             app:civ_border_width="2dp"
 
             />
-
 
 
     </RelativeLayout>
@@ -71,45 +70,46 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F3F3F3"
+        android:background="@color/thatOneGrey"
         android:padding="15dp">
 
 
         <TextView
+            android:id="@+id/visited_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/visitors_text"
-            android:text="100"
+            android:layout_toLeftOf="@+id/visited_text"
+            android:text="0"
             android:textColor="#000000"
             android:textSize="25sp" />
 
         <TextView
-            android:id="@+id/visitors_text"
+            android:id="@+id/visited_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
 
             android:padding="5sp"
-            android:text="visitors"
+            android:text="visited"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp" />
 
 
         <TextView
-            android:id="@+id/stars_text"
+            android:id="@+id/stars_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="10"
+            android:text="0"
             android:textColor="#000000"
             android:textSize="25sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/stars_text"
+            android:layout_toRightOf="@+id/stars_number"
             android:padding="5sp"
-            android:text="stars"
+            android:text="starred"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp" />
 
@@ -120,31 +120,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
         <com.like.LikeButton
             android:id="@+id/star_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            app:icon_size="70dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="false"
             app:anim_scale_factor="1.7"
+            app:icon_size="60dp"
             app:like_drawable="@drawable/ic_star"
             app:unlike_drawable="@drawable/ic_star_grey" />
 
 
-        <!--
-
         <ImageButton
-            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_report"
-
-            android:tint="#FFE600"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            />
+            android:layout_marginRight="20dp"
+            android:background="@drawable/btn_report_bg"
+            android:src="@drawable/ic_report"
+            android:tint="#FADB27" />
 
-        -->
 
     </RelativeLayout>
 

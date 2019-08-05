@@ -1,40 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ProfileFragment">
 
-    <!-- DEBUG OPTION
-    <Button
-        android:id="@+id/btn_profile_login"
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="#F7F7F7">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_user" />
+    </RelativeLayout>
+
+    <!---
+    <TextView
+        android:id="@+id/tv1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="enter login activity" />
-     -->
+        android:layout_below="@id/rl1"
+        android:textSize="25dp"
+        android:text="Contributions: " />
+    -->
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_logout"
-        app:backgroundTint="@color/colorPrimary"
+    <RelativeLayout
+        android:id="@+id/rl2"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:layout_margin="@dimen/login_buttons_margin"
-        app:cornerRadius="50dp"
-        android:text="logout"
-        android:textColor="@android:color/white" />
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp">
 
-    <com.google.android.material.button.MaterialButton
-        app:cornerRadius="50dp"
-        app:backgroundTint="@color/colorPrimary"
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="@dimen/login_buttons_margin"
-        android:text="login"
-        android:textColor="@android:color/white" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/login_buttons_margin"
+            android:text="logout"
+            android:textColor="@android:color/white"
+            app:backgroundTint="@color/colorPrimary"
+            app:cornerRadius="50dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/login_buttons_margin"
+            android:text="login"
+            android:textColor="@android:color/white"
+            app:backgroundTint="@color/colorPrimary"
+            app:cornerRadius="50dp" />
+
+    </RelativeLayout>
 
 
-</FrameLayout>
+</RelativeLayout>

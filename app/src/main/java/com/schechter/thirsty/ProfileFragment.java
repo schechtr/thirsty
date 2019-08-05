@@ -34,14 +34,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            Intent intent = new Intent(getActivity(), LoginMasterActivity.class);
-            startActivity(intent);
-        }
-
-
         return inflater.inflate(R.layout.fragment_profile, container, false);
 
     }

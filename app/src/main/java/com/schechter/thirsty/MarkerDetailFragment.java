@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +32,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -50,17 +54,21 @@ public class MarkerDetailFragment extends Fragment {
 
     private String incomingMarkerID = "";
     private IMainActivity iMainActivity;
-    private ChipGroup typeChipGroup;
-    private CircleImageView marker_detail_photo;
-    //private String markerID;
-
 
     // props from database
     private boolean bottle_refill;
     private boolean dog_bowl;
     private String databasePhotoURL = "";
     private Uri storagePhotoDownloadURI;
-    //private StorageReference mImageStorageReference;
+
+    // user specific
+    private boolean starred = false;
+
+    // buttons and ui elements
+    private LikeButton btn_star;
+    private ChipGroup typeChipGroup;
+    private CircleImageView marker_detail_photo;
+
 
     public MarkerDetailFragment() {
         // Required empty public constructor
@@ -103,7 +111,7 @@ public class MarkerDetailFragment extends Fragment {
         marker_detail_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!databasePhotoURL.equals("")) {
+                if (!databasePhotoURL.equals("")) {
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     final View photo_view_container = getLayoutInflater().inflate(R.layout.photo_view, null);
@@ -118,6 +126,47 @@ public class MarkerDetailFragment extends Fragment {
             }
         });
 
+        btn_star = view.findViewById(R.id.star_button);
+        btn_star.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+
+                starred = btn_star.isLiked();
+
+                if (!incomingMarkerID.equals("")) {
+                    final String markerID = incomingMarkerID;
+
+                    // TODO: IF no one is logged in then tell them they need to before being able to star                    */
+
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        final String uid = user.getUid();
+                        updateFirebaseUserData(markerID, uid);
+                    }
+                }
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+
+                starred = btn_star.isLiked();
+
+                if (!incomingMarkerID.equals("")) {
+                    final String markerID = incomingMarkerID;
+
+                    // TODO: IF no one is logged in then tell them they need to before being able to star                  */
+
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        final String uid = user.getUid();
+                        updateFirebaseUserData(markerID, uid);
+
+
+                    }
+                }
+            }
+        });
+
 
         if (!incomingMarkerID.equals("")) {
             Log.d("marker", incomingMarkerID);
@@ -125,6 +174,13 @@ public class MarkerDetailFragment extends Fragment {
             final String markerID = incomingMarkerID;
 
             pullFirebaseData(view, markerID);
+
+            // maybe hide the star up until this point
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                final String uid = user.getUid();
+                pullFirebaseUserData(view, markerID, uid);
+            }
         }
 
 
@@ -136,13 +192,53 @@ public class MarkerDetailFragment extends Fragment {
         });
 
 
+    }
 
+    private void updateFirebaseUserData(final String markerID, final String uid) {
+
+        /* update starred status */
+        DatabaseReference reference = FirebaseDatabase.getInstance()
+                .getReference("Users").child(uid).child("starred");
+
+        reference.child(markerID).setValue(starred);
 
     }
 
 
+    private void pullFirebaseUserData(final View view, final String markerID, final String uid) {
 
-    private void pullFirebaseData(final View view, String markerID) {
+        DatabaseReference reference = FirebaseDatabase.getInstance()
+                .getReference("Users").child(uid).child("starred");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                // find out if the markerID specified exists in the starred list and if so find out
+                // if it is set to true (as in yes)
+
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+
+                    if (child.getKey().equals(markerID) && child.getValue().equals(true)) {
+                        // then set starred to true
+                        starred = true;
+                    }
+                }
+
+                setupStar(view);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: marker, error fetching user data");
+            }
+        });
+
+    }
+
+
+    private void pullFirebaseData(final View view, final String markerID) {
 
         /* pull data from firebase */
         DatabaseReference reference = FirebaseDatabase.getInstance()
@@ -229,5 +325,16 @@ public class MarkerDetailFragment extends Fragment {
 
     }
 
+    private void setupStar(View view) {
+
+        LikeButton star = view.findViewById(R.id.star_button);
+
+        if (starred == false) {
+            star.setLiked(false);
+        } else {
+            star.setLiked(true);
+        }
+
+    }
 
 }
