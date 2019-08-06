@@ -52,6 +52,11 @@ public class Location {
     }
 
 
+    public Location() {
+        // Default constructor required for calls to DataSnapshot.getValue(Location.class)
+    }
+
+
     public Location(LatLng location) {
         this.latitude = location.latitude;
         this.longitude = location.longitude;
@@ -65,5 +70,6 @@ public class Location {
         this.bottle_refill = bottle_refill;
 
     }
+
 
 }
