@@ -155,11 +155,13 @@ public class AddNewLocationFragment extends Fragment {
         final boolean bottle_refill = options[0];
         final boolean dog_bowl = options[1];
 
-        Location newLocation = new Location(location);
+        Location newLocation = new Location(getContext() ,location);
         newLocation.setBottle_refill(bottle_refill);
         newLocation.setDog_bowl(dog_bowl);
+        newLocation.findNearestPlace();
 
         Log.d(TAG, "addLocationToDatabase: " + currentphotoStorageURL);
+
         if (currentphotoStorageURL != null)
             newLocation.setPhotoURL(currentphotoStorageURL);
 
@@ -181,6 +183,8 @@ public class AddNewLocationFragment extends Fragment {
                 }
             }
         });
+
+
 
     }
 
