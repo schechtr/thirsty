@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -60,6 +61,8 @@ public class MarkerDetailFragment extends Fragment {
     private boolean dog_bowl;
     private String databasePhotoURL = "";
     private Uri storagePhotoDownloadURI;
+    private String vicinity;
+    private String place_name;
 
     // user specific
     private boolean starred = false;
@@ -250,8 +253,10 @@ public class MarkerDetailFragment extends Fragment {
 
                 bottle_refill = (boolean) dataSnapshot.child("bottle_refill").getValue();
                 dog_bowl = (boolean) dataSnapshot.child("dog_bowl").getValue();
-                databasePhotoURL = (String) dataSnapshot.child("photoURL").getValue();
+                databasePhotoURL = (String) dataSnapshot.child("photo_url").getValue();
 
+                vicinity = (String) dataSnapshot.child("vicinity").getValue();
+                place_name = (String) dataSnapshot.child("nearby_place_name").getValue();
 
                 // now grab the detail images
                 if (!databasePhotoURL.equals("")) {
@@ -294,7 +299,6 @@ public class MarkerDetailFragment extends Fragment {
 
 
         /* Add Chips */
-
         List<String> fountainType = new ArrayList<>();
         if (bottle_refill)
             fountainType.add("bottle refill");
@@ -322,6 +326,10 @@ public class MarkerDetailFragment extends Fragment {
 
             Log.d(TAG, "setupUI: " + storagePhotoDownloadURI);
         }
+
+        /* add places data */
+        ((TextView) view.findViewById(R.id.near_value)).setText(place_name);
+        ((TextView) view.findViewById(R.id.address_value)).setText(vicinity);
 
     }
 

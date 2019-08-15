@@ -24,12 +24,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    private List<String> mImageNames = new ArrayList<>();
+    private List<String> mVicinities = new ArrayList<>();
+    private List<String> mNearbyPlaceNames = new ArrayList<>();
     private List<Uri> mImages = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(Context context, List<String> imagesNames, List<Uri> images) {
-        mImageNames = imagesNames;
+    public RecyclerViewAdapter(Context context, List<String> vicinities, List<String> nearbyPlaceNames, List<Uri> images) {
+        mNearbyPlaceNames = nearbyPlaceNames;
+        mVicinities = vicinities;
         mImages = images;
         mContext = context;
     }
@@ -50,14 +52,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         Glide.with(mContext).asBitmap().load(mImages.get(position)).into(holder.image);
 
-        holder.imageName.setText(mImageNames.get(position));
+
+        holder.mainText.setText(mNearbyPlaceNames.get(position));
+        holder.subText.setText(mVicinities.get(position));
+
+
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked ");
 
-                Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mNearbyPlaceNames.get(position), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -65,7 +71,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return mImageNames.size();
+        return mImages.size();
     }
 
 
@@ -73,7 +79,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
         private CircleImageView image;
-        private TextView imageName;
+        private TextView mainText;
+        private TextView subText;
         private RelativeLayout parentLayout;
 
 
@@ -81,7 +88,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
 
             image = itemView.findViewById(R.id.recycler_item_image);
-            imageName = itemView.findViewById(R.id.recycler_item_text);
+            mainText = itemView.findViewById(R.id.recycler_item_main_text);
+            subText = itemView.findViewById(R.id.recycler_item_sub_text);
             parentLayout = itemView.findViewById(R.id.recycler_item_container);
         }
 

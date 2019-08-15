@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class GetNearbyPlacesData extends AsyncTask<Object, Void, String> {
     private static final String TAG = "GetNearbyPlacesData";
     private Location mLocation;
 
+    private final String[] TYPES_TO_EXCLUDE = {"political", "locality"};
+
 
     @Override
     protected String doInBackground(Object... objects) {
@@ -34,6 +37,9 @@ public class GetNearbyPlacesData extends AsyncTask<Object, Void, String> {
         String googlePlacesResponse = "";
 
         try {
+
+
+
             googlePlacesResponse = readUrl(nearbySearchUrl);
             Log.d(TAG, "findNearestPlace: " + googlePlacesResponse);
         } catch (Exception e) {
@@ -48,12 +54,11 @@ public class GetNearbyPlacesData extends AsyncTask<Object, Void, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        List<HashMap<String, String>> places = parseJSON(s);
+        List<HashMap<String, List<String>>> places = parseJSON(s);
 
         Log.d(TAG, "onPostExecute: " + places);
 
-        mLocation.setNearbyPlaces(places);
-
+        mLocation.setNearby_places(places);
 
 
     }
@@ -109,7 +114,7 @@ public class GetNearbyPlacesData extends AsyncTask<Object, Void, String> {
     }
 
 
-    private List<HashMap<String, String>> parseJSON(String googlePlacesResponse) {
+    private List<HashMap<String, List<String>>> parseJSON(String googlePlacesResponse) {
 
         JSONArray jsonArray = null;
         JSONObject jsonObject;
@@ -125,11 +130,11 @@ public class GetNearbyPlacesData extends AsyncTask<Object, Void, String> {
         return getPlaces(jsonArray);
     }
 
-    private List<HashMap<String, String>> getPlaces(JSONArray googlePlaceJsonArray) {
+    private List<HashMap<String, List<String>>> getPlaces(JSONArray googlePlaceJsonArray) {
 
 
-        List<HashMap<String, String>> places = new ArrayList<>();
-        HashMap<String, String> place;
+        List<HashMap<String, List<String>>> places = new ArrayList<>();
+        HashMap<String, List<String>> place;
 
         int size = googlePlaceJsonArray.length();
 
@@ -138,7 +143,8 @@ public class GetNearbyPlacesData extends AsyncTask<Object, Void, String> {
             try {
 
                 place = getPlace((JSONObject) googlePlaceJsonArray.get(i));
-                places.add(place);
+                if(place != null)
+                    places.add(place);
             } catch (JSONException e) {
                 Log.d(TAG, "getPlaces: JSONException");
                 e.printStackTrace();
@@ -149,31 +155,53 @@ public class GetNearbyPlacesData extends AsyncTask<Object, Void, String> {
         return places;
     }
 
-    private HashMap<String, String> getPlace(JSONObject googlePlaceJson) {
+    private HashMap<String, List<String>> getPlace(JSONObject googlePlaceJson) {
 
-        HashMap<String, String> place = new HashMap<>();
-        String placeName = "--NA--";
-        String vicinity = "--NA--";
-        String latitude = "";
-        String longitude = "";
+        HashMap<String, List<String>> place = new HashMap<>();
+        List<String> placeName = new ArrayList<>();
+        List<String> vicinity = new ArrayList<>();
+        List<String> latitude = new ArrayList<>();
+        List<String> longitude = new ArrayList<>();
+        List<String> types = new ArrayList<>();
+
         //String reference
 
         try {
             if (!googlePlaceJson.isNull("name")) {
-                placeName = googlePlaceJson.getString("name");
+                placeName.add(googlePlaceJson.getString("name"));
+            } else {
+                placeName.add("--NA--");
             }
 
             if (!googlePlaceJson.isNull("vicinity")) {
-                vicinity = googlePlaceJson.getString("vicinity");
+                vicinity.add(googlePlaceJson.getString("vicinity"));
+            } else {
+                vicinity.add("--NA--");
             }
 
-            latitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat");
-            longitude = googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng");
+            if (!googlePlaceJson.isNull("types")) {
+                JSONArray typesJSON = googlePlaceJson.getJSONArray("types");
+                for (int i = 0; i < typesJSON.length(); i++) {
+
+                    String type = typesJSON.getString(i);
+                    if (Arrays.asList(TYPES_TO_EXCLUDE).contains(type)) {
+                        return null;
+                    } else {
+                        types.add(type);
+                    }
+                }
+            } else {
+                types.add("--NA--");
+            }
+
+            latitude.add(googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lat"));
+            longitude.add(googlePlaceJson.getJSONObject("geometry").getJSONObject("location").getString("lng"));
 
             place.put("place_name", placeName);
             place.put("vicinity", vicinity);
             place.put("lat", latitude);
             place.put("lng", longitude);
+            place.put("types", types);
 
 
         } catch (JSONException e) {

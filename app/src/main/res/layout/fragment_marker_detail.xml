@@ -13,6 +13,48 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/near_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5sp"
+            android:text="near "
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textStyle="italic"
+
+            />
+
+        <TextView
+            android:id="@+id/near_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/near_label"
+            android:padding="5sp"
+            android:text=""
+
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:textStyle="italic|bold" />
+
+        <TextView
+            android:id="@+id/address_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/near_label"
+            android:padding="5sp"
+            android:text=""
+            android:textSize="15sp"
+            android:textStyle="italic" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 

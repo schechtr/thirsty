@@ -45,7 +45,8 @@ public class StarredFragment extends Fragment {
 
 
     // stuff a recycler item needs
-    private List<String> mNames;
+    private List<String> mNearbyPlaceNames;
+    private List<String> mVicinities;
     private List<Uri> mImageURLs;
 
     private RecyclerView mRecyclerView;
@@ -61,7 +62,8 @@ public class StarredFragment extends Fragment {
         mStarred = new ArrayList<>();
 
         mImageURLs = new ArrayList<>();
-        mNames = new ArrayList<>();
+        mNearbyPlaceNames = new ArrayList<>();
+        mVicinities = new ArrayList<>();
 
     }
 
@@ -127,9 +129,7 @@ public class StarredFragment extends Fragment {
                     }
                 }
 
-                if (mStarred.isEmpty())
-                    return;
-                else {
+                if (!mStarred.isEmpty()) {
                     Log.d(TAG, "onDataChange: calling pullFirebaseLocationData");
                     pullFirebaseLocationData(view);
                 }
@@ -188,12 +188,12 @@ public class StarredFragment extends Fragment {
         for (final Location location : mLocations) {
 
 
-            if (location.getPhotoURL().equals(""))
-                location.setPhotoURL("images/fountain_round.png");
+            if (location.getPhoto_url().equals(""))
+                location.setPhoto_url("images/fountain_round.png");
 
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
-            storageReference.child(location.getPhotoURL()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            storageReference.child(location.getPhoto_url()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
 
@@ -202,7 +202,8 @@ public class StarredFragment extends Fragment {
 
                     // proceed
                     mImageURLs.add(uri);
-                    mNames.add("name");
+                    mNearbyPlaceNames.add(location.getNearby_place_name());
+                    mVicinities.add(location.getVicinity());
 
 
                     if (mImageURLs.size() == mLocations.size()) {
@@ -225,7 +226,7 @@ public class StarredFragment extends Fragment {
     private void initRecyclerView(View view) {
 
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), mNames, mImageURLs);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), mVicinities, mNearbyPlaceNames, mImageURLs);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

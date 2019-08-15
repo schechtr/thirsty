@@ -155,22 +155,26 @@ public class AddNewLocationFragment extends Fragment {
         final boolean bottle_refill = options[0];
         final boolean dog_bowl = options[1];
 
-        Location newLocation = new Location(getContext() ,location);
+        final Location newLocation = new Location(getContext(), location);
         newLocation.setBottle_refill(bottle_refill);
         newLocation.setDog_bowl(dog_bowl);
-        newLocation.findNearestPlace();
 
         Log.d(TAG, "addLocationToDatabase: " + currentphotoStorageURL);
 
         if (currentphotoStorageURL != null)
-            newLocation.setPhotoURL(currentphotoStorageURL);
+            newLocation.setPhoto_url(currentphotoStorageURL);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Locations");
-        databaseReference.push().setValue(newLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Locations");
+        final String location_id = databaseReference.push().getKey();
+        newLocation.setLocation_id(location_id);
+        newLocation.findNearestPlace();
+
+        databaseReference.child(location_id).setValue(newLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Log.d(TAG, "onComplete: database upload success");
+
 
                     mapFragment.showFABs();
                     getFragmentManager().popBackStack();
@@ -183,7 +187,6 @@ public class AddNewLocationFragment extends Fragment {
                 }
             }
         });
-
 
 
     }
