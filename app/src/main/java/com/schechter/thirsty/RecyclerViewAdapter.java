@@ -27,13 +27,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<String> mVicinities = new ArrayList<>();
     private List<String> mNearbyPlaceNames = new ArrayList<>();
     private List<Uri> mImages = new ArrayList<>();
+    private List<String> mMarkerIDs = new ArrayList<>();
     private Context mContext;
+    private MainActivity mMainActivity;
 
-    public RecyclerViewAdapter(Context context, List<String> vicinities, List<String> nearbyPlaceNames, List<Uri> images) {
+
+    public RecyclerViewAdapter(Context context, List<String> vicinities, List<String> nearbyPlaceNames, List<Uri> images, List<String> markerIDs) {
         mNearbyPlaceNames = nearbyPlaceNames;
         mVicinities = vicinities;
         mImages = images;
         mContext = context;
+        mMarkerIDs = markerIDs;
+
+
+    }
+
+    public void setMainActivity(MainActivity mMainActivity) {
+        this.mMainActivity = mMainActivity;
     }
 
 
@@ -63,11 +73,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked ");
 
-                Toast.makeText(mContext, mNearbyPlaceNames.get(position), Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(mContext, mMarkerIDs.get(position), Toast.LENGTH_SHORT).show();
+                if(mMainActivity != null) {
+                   mMainActivity.switchContent(mMarkerIDs.get(position));
+                }
+
+
+
+
             }
         });
 
     }
+
+
 
     @Override
     public int getItemCount() {

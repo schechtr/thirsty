@@ -246,10 +246,13 @@ public class MarkerDetailFragment extends Fragment {
         /* pull data from firebase */
         DatabaseReference reference = FirebaseDatabase.getInstance()
                 .getReference("Locations").child(markerID);
+        
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                
+                /* TODO: check to make sure that dataSnapshot child actually exist */
 
                 bottle_refill = (boolean) dataSnapshot.child("bottle_refill").getValue();
                 dog_bowl = (boolean) dataSnapshot.child("dog_bowl").getValue();

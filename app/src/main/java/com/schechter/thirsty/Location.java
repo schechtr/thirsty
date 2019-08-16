@@ -23,8 +23,6 @@ public class Location {
     // Location Properties
 
     private double latitude;
-
-
     private double longitude;
 
 
@@ -84,6 +82,11 @@ public class Location {
 
     public String getNearby_place_name() {
         return nearby_place_name;
+    }
+
+
+    public String getLocation_id() {
+        return location_id;
     }
 
     /* ************************** */
@@ -163,7 +166,11 @@ public class Location {
     }
 
 
-// Constructors
+
+    /* ************************** */
+    /*          MarkerID          */
+    /* ************************** */
+
 
     public Location() {
         // Default constructor required for calls to DataSnapshot.getValue(Location.class)
@@ -219,18 +226,18 @@ public class Location {
 
     private String buildUrl() {
 
-        /*
+
 
         String nearbySearchUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
-        //nearbySearchUrl += "&location=" + getLatitude() + "," + getLongitude();
-        nearbySearchUrl += "&location=" + 33.6817602 + "," + -117.6616694;
+        nearbySearchUrl += "&location=" + getLatitude() + "," + getLongitude();
+        //nearbySearchUrl += "&location=" + 33.6817602 + "," + -117.6616694;
         nearbySearchUrl += "&radius=" + NEARBY_SEARCH_RADIUS;
         nearbySearchUrl += "&key=" + mContext.getString(R.string.api_key);
 
 
         return nearbySearchUrl;
-        */
-        return "https://api.myjson.com/bins/1gfxzx";
+
+        //return "https://api.myjson.com/bins/1gfxzx";
     }
 
 

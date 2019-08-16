@@ -81,6 +81,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient mFusedLocationClient;
     private PlacesClient placesClient;
     private boolean mFirstRequest; // sketchy way of detecting the first request for locationCallback
+    private List<MarkerItem> mMarkerItems;
 
     // Buttons and fragments
     private SupportMapFragment mapFragment;
@@ -95,8 +96,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private DatabaseReference mDatabaseReference;
     private List<MarkerItem> markerItemList;
 
-    // Marker ID Communication to MarkerDetailFragment
+    // Marker ID Communication
     private String outgoingMarkerID;
+    private String incomingMarkerID = "";
+
     // general communication
     private IMainActivity iMainActivity;
 
@@ -113,6 +116,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onAttach(Context context) {
         super.onAttach(context);
         iMainActivity = (IMainActivity) getActivity();
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            incomingMarkerID = bundle.getString(getString(R.string.marker_id_key));
+        }
     }
 
     /*** limit the amount of computation done in this method, and use onViewCreated for the rest ***/
@@ -140,6 +155,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
     }
 
@@ -207,8 +223,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     Log.d(TAG, "onClick: add button clicked!");
 
+                    /* TODO: decide whether or not to move the camera?? */
+
                     // get current location
-                    final LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                    final LatLng latLng = new LatLng(mLastLocation.getLatitude() - 0.0005, mLastLocation.getLongitude());
 
                     // zoom into location
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -290,7 +308,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
 
 
+
     }
+
+    private void markerItemClicked(MarkerItem markerItem) {
+
+        // get marker location
+        final LatLng latLng = new LatLng(markerItem.getPosition().latitude - 0.0015,
+                markerItem.getPosition().longitude);
+
+        // center on location
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+
+
+        markerDetailFragment = new MarkerDetailFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.marker_detail_container,
+                markerDetailFragment).addToBackStack(null).commit();
+
+        btn_add.hide();
+        btn_current_location.hide();
+
+
+        iMainActivity.sendMarkerID(markerDetailFragment, markerItem.getID());
+    }
+
 
     /*** setup for map pin clustering ***/
     private void setUpClusterManager(GoogleMap googleMap) {
@@ -298,6 +340,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         clusterManager.setRenderer(new MarkerClusterRenderer(getContext(), googleMap, clusterManager));
         googleMap.setOnCameraIdleListener(clusterManager);
         List<MarkerItem> items = getItems();
+
+
         clusterManager.addItems(items);
         clusterManager.cluster();
         clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MarkerItem>() {
@@ -306,24 +350,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 Log.d("marker", "Marker clicked");
 
-                // get current location
-                final LatLng latLng = new LatLng(markerItem.getPosition().latitude,
-                        markerItem.getPosition().longitude);
-
-                // center on location
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-
-                markerDetailFragment = new MarkerDetailFragment();
-                getChildFragmentManager().beginTransaction().replace(R.id.marker_detail_container,
-                        markerDetailFragment).addToBackStack(null).commit();
-
-                btn_add.hide();
-                btn_current_location.hide();
-
-
-                iMainActivity.sendMarkerID(markerDetailFragment, markerItem.getID());
-
+                markerItemClicked(markerItem);
 
                 Log.d("marker", markerItem.getPosition().latitude + "," + markerItem.getPosition().longitude);
 
@@ -331,7 +358,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+
         googleMap.setOnMarkerClickListener(clusterManager);
+
 
     }
 
@@ -365,6 +394,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 }
 
+                if (!incomingMarkerID.equals("")) {
+
+                    final String markerID = incomingMarkerID;
+
+                    for (MarkerItem markerItem : getItems()) {
+
+                        Log.d(TAG, "onMapReady: " + markerItem.getID());
+                        if (markerItem.getID().equals(markerID)) {
+                            markerItemClicked(markerItem);
+
+                            break;
+                        }
+                    }
+                }
+
                 setUpClusterManager(mMap);
             }
 
@@ -386,7 +430,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 if (mFusedLocationClient.getApplicationContext() != null) {
                     mLastLocation = location;
 
-                    if (mFirstRequest) {
+                    if (mFirstRequest && incomingMarkerID.equals("")) {
 
                         // move the camera
                         mMap.moveCamera(CameraUpdateFactory.

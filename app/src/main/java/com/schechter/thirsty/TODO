@@ -9,3 +9,7 @@
 
 - Bug: app crashes when you try to add a new location before the current location data has been loaded
     - solution: hide the button until that shit is available
+
+- cooldown for adding a new location or some other mechanism to mitigate tampering
+
+- when a user updates info about a place if someone is already looking at that place it might crash

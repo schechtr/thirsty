@@ -11,6 +11,4 @@ public interface IMainActivity  {
 
     void sendCurrentLocation(Fragment fragment, LatLng latLng);
 
-
-
 }

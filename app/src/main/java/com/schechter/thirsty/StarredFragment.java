@@ -48,7 +48,9 @@ public class StarredFragment extends Fragment {
     private List<String> mNearbyPlaceNames;
     private List<String> mVicinities;
     private List<Uri> mImageURLs;
+    private List<String> mMarkerIDs;
 
+    private MainActivity mMainActivity;
     private RecyclerView mRecyclerView;
 
     // data pulled from firebase
@@ -61,6 +63,7 @@ public class StarredFragment extends Fragment {
         mLocations = new ArrayList<>();
         mStarred = new ArrayList<>();
 
+        mMarkerIDs = new ArrayList<>();
         mImageURLs = new ArrayList<>();
         mNearbyPlaceNames = new ArrayList<>();
         mVicinities = new ArrayList<>();
@@ -107,6 +110,8 @@ public class StarredFragment extends Fragment {
 
         }
 
+        mMainActivity = (MainActivity) getActivity();
+
     }
 
     private void pullFirebaseUserData(final View view, final String uid) {
@@ -151,7 +156,7 @@ public class StarredFragment extends Fragment {
         DatabaseReference reference = FirebaseDatabase.getInstance()
                 .getReference("Locations");
 
-        for (String markerID : mStarred) {
+        for (final String markerID : mStarred) {
 
             reference.child(markerID).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -160,6 +165,7 @@ public class StarredFragment extends Fragment {
 
                     Location location = dataSnapshot.getValue(Location.class);
                     mLocations.add(location);
+                    Log.d(TAG, "onDataChange: " + markerID);
 
                     // a shitty way of handling this async task, but faster than going thru literally every location in the database
                     // mStarred is 'guaranteed' to not be empty because we already checked for that earlier
@@ -204,6 +210,9 @@ public class StarredFragment extends Fragment {
                     mImageURLs.add(uri);
                     mNearbyPlaceNames.add(location.getNearby_place_name());
                     mVicinities.add(location.getVicinity());
+                    mMarkerIDs.add(location.getLocation_id());
+                    Log.d(TAG, "onSuccess: " + location.getNearby_place_name() + ", " + location.getLocation_id());
+
 
 
                     if (mImageURLs.size() == mLocations.size()) {
@@ -226,7 +235,8 @@ public class StarredFragment extends Fragment {
     private void initRecyclerView(View view) {
 
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), mVicinities, mNearbyPlaceNames, mImageURLs);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), mVicinities, mNearbyPlaceNames, mImageURLs, mMarkerIDs);
+        adapter.setMainActivity(mMainActivity);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

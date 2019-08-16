@@ -164,6 +164,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /*** switch fragments without using the navigation drawer ***/
+    public void switchContent(String markerID) {
+
+        MapFragment mapFragment = new MapFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
+                mapFragment).commit();
+
+        sendMarkerID(mapFragment, markerID);
+
+    }
+
+
 
     /*** Communication with IMainActivity Interface ***/
 
