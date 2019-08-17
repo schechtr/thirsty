@@ -35,6 +35,44 @@
         </androidx.cardview.widget.CardView>
 
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_map_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="230dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_map_type"
+            android:tint="@android:color/white"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="normal"
+
+            />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:mstb="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <org.honorato.multistatetogglebutton.MultiStateToggleButton
+                android:id="@+id/map_type_selector"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone"
+                mstb:mstbPrimaryColor="@color/colorPrimary"
+                mstb:mstbSecondaryColor="@android:color/white"
+                mstb:values="@array/map_type_array" />
+        </LinearLayout>
+
+
         <!-- current location and add spot buttons -->
 
 
@@ -48,8 +86,8 @@
             android:layout_marginBottom="145dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_current_location"
-            app:backgroundTint="@color/colorPrimary"
             android:tint="@android:color/white"
+            app:backgroundTint="@color/colorPrimary"
             app:fabSize="normal"
 
             />

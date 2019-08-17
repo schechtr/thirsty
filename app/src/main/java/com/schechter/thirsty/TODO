@@ -13,3 +13,7 @@
 - cooldown for adding a new location or some other mechanism to mitigate tampering
 
 - when a user updates info about a place if someone is already looking at that place it might crash
+
+- in the future create a social network aspect where you can write a bio about yourself and what kind
+  of water bottle you use. have some sort of point system based on contributions. have the ability to look
+  at someone else's profile and see what they have contributed.

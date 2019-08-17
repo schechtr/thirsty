@@ -63,6 +63,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.ClusterManager;
 
+import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+import org.honorato.multistatetogglebutton.ToggleButton;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,8 +91,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private MarkerDetailFragment markerDetailFragment;
     private AddNewLocationFragment addNewLocationFragment;
     private View locationButton;
-    private FloatingActionButton btn_current_location, btn_add;
+    private FloatingActionButton btn_current_location, btn_add, btn_map_type;
     private AutocompleteSupportFragment autocompleteFragment;
+    private MultiStateToggleButton mstb_map_type;
 
 
     // Firebase database
@@ -163,6 +167,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void showFABs() {
         btn_add.show();
         btn_current_location.show();
+        btn_map_type.show();
+        btn_map_type.setImageResource(R.drawable.ic_map_type);
+    }
+
+    public void hideFABs() {
+        btn_add.hide();
+        btn_current_location.hide();
+
+
+        if (mstb_map_type.getVisibility() == View.VISIBLE)
+            btn_map_type.callOnClick();
+        btn_map_type.hide();
     }
 
 
@@ -175,9 +191,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mMap = googleMap;
 
+
         // set up clustering and read from database
         loadFirebaseMapData();
-
 
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000); // location updates every second
@@ -226,7 +242,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     /* TODO: decide whether or not to move the camera?? */
 
                     // get current location
-                    final LatLng latLng = new LatLng(mLastLocation.getLatitude() - 0.0005, mLastLocation.getLongitude());
+                    final LatLng latLng = new LatLng(mLastLocation.getLatitude() - 0.0000, mLastLocation.getLongitude());
 
                     // zoom into location
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -236,8 +252,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
                     // hide fab's
-                    btn_add.hide();
-                    btn_current_location.hide();
+                    hideFABs();
 
 
                     // launch new fragment
@@ -246,6 +261,65 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             addNewLocationFragment).addToBackStack(null).commit();
 
                     iMainActivity.sendCurrentLocation(addNewLocationFragment, latLng);
+
+                }
+            }
+        });
+
+        mstb_map_type = getView().findViewById(R.id.map_type_selector);
+        mstb_map_type.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        mstb_map_type.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int value) {
+                if (mMap != null) {
+
+                    Log.d(TAG, "onClick: clicked mtsb");
+
+                    boolean[] options = mstb_map_type.getStates();
+                    if (options[0])
+                        mMap.setMapType(mMap.MAP_TYPE_NORMAL);
+                    else if (options[1])
+                        mMap.setMapType(mMap.MAP_TYPE_HYBRID);
+                }
+            }
+        });
+
+
+        btn_map_type = getView().findViewById(R.id.btn_map_type);
+        btn_map_type.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (mMap != null) {
+
+                    Log.d(TAG, "onClick: map type button clicked");
+
+                    // show or hide map type toggle switch
+                    if (mstb_map_type.getVisibility() == View.GONE) {
+                        btn_map_type.setImageResource(R.drawable.ic_map_type_close);
+
+                        // temp solution 4 bug: https://stackoverflow.com/questions/51919865/disappearing-fab-icon-on-navigation-fragment-change
+                        btn_map_type.hide();
+                        btn_map_type.show();
+
+                        Log.d(TAG, "onClick: close resource");
+                        mstb_map_type.setVisibility(View.VISIBLE);
+
+                    } else if (mstb_map_type.getVisibility() == View.VISIBLE) {
+                        btn_map_type.setImageResource(R.drawable.ic_map_type);
+                        btn_map_type.hide();
+                        btn_map_type.show();
+
+                        Log.d(TAG, "onClick: open resource");
+                        mstb_map_type.setVisibility(View.GONE);
+                    }
+
 
                 }
             }
@@ -300,13 +374,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     Log.d("marker", "popping backstack");
                     getChildFragmentManager().popBackStack();
 
-                    btn_add.show();
-                    btn_current_location.show();
+                    showFABs();
 
                 }
             }
         });
-
 
 
     }
@@ -326,9 +398,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         getChildFragmentManager().beginTransaction().replace(R.id.marker_detail_container,
                 markerDetailFragment).addToBackStack(null).commit();
 
-        btn_add.hide();
-        btn_current_location.hide();
-
+        hideFABs();
 
         iMainActivity.sendMarkerID(markerDetailFragment, markerItem.getID());
     }

@@ -13,14 +13,32 @@
         android:layout_height="250dp"
         android:background="#F7F7F7">
 
+        <!---<RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/btn_add_profile_pic_bg"
+            android:clickable="true"
+            android:layout_height="wrap_content"> -->
+
+        <!---
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btn_profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:clickable="false"
             android:layout_centerInParent="true"
-            android:background="@android:color/transparent"
+            android:background="@null"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_user" />
+            android:src="@drawable/ic_user" /> -->
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:clickable="true"
+            android:background="@drawable/btn_add_profile_pic_bg"
+            />
+
+
     </RelativeLayout>
 
     <!---
