@@ -76,9 +76,7 @@ import static com.android.volley.VolleyLog.TAG;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
-    /*** member variables ***/
-
-
+    // member variables
     private GoogleMap mMap;
     private Place mPlace;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -406,7 +404,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     /*** setup for map pin clustering ***/
     private void setUpClusterManager(GoogleMap googleMap) {
-        ClusterManager<MarkerItem> clusterManager = new ClusterManager<>(getContext(), googleMap);
+
+
+        /* TODO: getContext is null sometimes?*/
+
+        Context context = getContext();
+        if(context == null)
+            Log.d(TAG, "setUpClusterManager: context is null");
+
+        ClusterManager<MarkerItem> clusterManager = new ClusterManager<>(context, googleMap);
         clusterManager.setRenderer(new MarkerClusterRenderer(getContext(), googleMap, clusterManager));
         googleMap.setOnCameraIdleListener(clusterManager);
         List<MarkerItem> items = getItems();
@@ -414,6 +420,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         clusterManager.addItems(items);
         clusterManager.cluster();
+
+
         clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MarkerItem>() {
             @Override
             public boolean onClusterItemClick(MarkerItem markerItem) {

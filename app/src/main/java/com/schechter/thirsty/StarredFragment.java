@@ -234,7 +234,7 @@ public class StarredFragment extends Fragment {
 
     private void initRecyclerView(View view) {
 
-        mRecyclerView = view.findViewById(R.id.recycler_view);
+        mRecyclerView = view.findViewById(R.id.starred_recycler_container);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), mVicinities, mNearbyPlaceNames, mImageURLs, mMarkerIDs);
         adapter.setMainActivity(mMainActivity);
         mRecyclerView.setAdapter(adapter);

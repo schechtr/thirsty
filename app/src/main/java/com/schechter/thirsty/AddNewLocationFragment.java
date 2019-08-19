@@ -32,6 +32,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -68,6 +70,9 @@ public class AddNewLocationFragment extends Fragment {
     private Button btn_confirm_add;
     private ImageButton btn_add_a_photo;
     private MapFragment mapFragment;
+
+    /* TODO: when user is not authenticated there should be something letting them know that they must sign in first */
+
 
 
     public AddNewLocationFragment(MapFragment mapFragment) {
@@ -176,6 +181,13 @@ public class AddNewLocationFragment extends Fragment {
                     Log.d(TAG, "onComplete: database upload success");
 
 
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        final String uid = user.getUid();
+                        updateFirebaseUserData(location_id, uid);
+                        
+                    }
+
                     mapFragment.showFABs();
                     getFragmentManager().popBackStack();
 
@@ -188,6 +200,25 @@ public class AddNewLocationFragment extends Fragment {
             }
         });
 
+
+    }
+
+    private void updateFirebaseUserData(final String markerID, final String uid) {
+
+        /* update starred status */
+        DatabaseReference reference = FirebaseDatabase.getInstance()
+                .getReference("Users").child(uid).child("contributed");
+
+        reference.child(markerID).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    mapFragment.showFABs();
+                    getFragmentManager().popBackStack();
+                } else
+                    Log.d(TAG, "onComplete: error finalizing user data update");
+            }
+        });
 
     }
 

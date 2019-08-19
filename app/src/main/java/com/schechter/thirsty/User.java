@@ -11,9 +11,8 @@ public class User {
     private String some_data;
 
 
-
-    //private List<String> mContributed;
     private HashMap<String, Boolean> starred;
+    private HashMap<String, Boolean> contributed;
     //private List<String> mVisited;
 
 
@@ -21,7 +20,9 @@ public class User {
         //this.mUID = uid;
         this.some_data = "data here";
         this.starred = new HashMap<>();
+        this.contributed = new HashMap<>();
         starred.put("0", true);
+        contributed.put("0", true);
 
         //  mContributed = new ArrayList<>();
         //  mStarred = new ArrayList<>();
@@ -31,6 +32,7 @@ public class User {
     public HashMap<String, Boolean> getStarred() {
         return starred;
     }
+    public HashMap<String, Boolean> getContributed() { return contributed; };
 
 
 
@@ -43,12 +45,6 @@ public class User {
     }
 
 
-
-    //public List<String> getContributed() {return mContributed;}
-
-    //public List<String> getStarred() {return mStarred;}
-
-    //public List<String> getVisited() {return mVisited;}
 
 
 }

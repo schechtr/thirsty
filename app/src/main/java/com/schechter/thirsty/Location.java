@@ -25,6 +25,9 @@ public class Location {
     private double latitude;
     private double longitude;
 
+    private String contributor = "";
+
+
 
     private String vicinity = "";
     private String nearby_place_name = "";
@@ -84,10 +87,11 @@ public class Location {
         return nearby_place_name;
     }
 
-
     public String getLocation_id() {
         return location_id;
     }
+
+    public String getContributor() { return contributor; }
 
     /* ************************** */
     /*           Setters          */
@@ -112,6 +116,8 @@ public class Location {
     public void setNearby_place_name(String nearby_place_name) {
         this.nearby_place_name = nearby_place_name;
     }
+
+    public void setContributor(String contributor) { this.contributor = contributor; }
 
 
     public void setNearby_places(List<HashMap<String, List<String>>> nearby_places) {
@@ -181,6 +187,8 @@ public class Location {
         mContext = context;
         this.latitude = location.latitude;
         this.longitude = location.longitude;
+
+
         //this.nearby_places = new ArrayList<>();
         //HashMap<String, List<String>> placeHolder = new HashMap<>();
         //List<String> placeHolderList = new ArrayList<String>();
