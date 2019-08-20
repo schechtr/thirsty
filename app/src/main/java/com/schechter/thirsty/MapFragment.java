@@ -56,6 +56,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -68,6 +69,7 @@ import org.honorato.multistatetogglebutton.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.android.volley.VolleyLog.TAG;
@@ -83,6 +85,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private PlacesClient placesClient;
     private boolean mFirstRequest; // sketchy way of detecting the first request for locationCallback
     private List<MarkerItem> mMarkerItems;
+
+    private Context mContext;
 
     // Buttons and fragments
     private SupportMapFragment mapFragment;
@@ -158,6 +162,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        mContext = view.getContext();
+
 
     }
 
@@ -191,6 +197,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
         // set up clustering and read from database
+        Log.d(TAG, "onMapReady: called");
         loadFirebaseMapData();
 
         mLocationRequest = new LocationRequest();
@@ -408,15 +415,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         /* TODO: getContext is null sometimes?*/
 
-        Context context = getContext();
-        if(context == null)
+
+        if (mContext == null)
             Log.d(TAG, "setUpClusterManager: context is null");
 
-        ClusterManager<MarkerItem> clusterManager = new ClusterManager<>(context, googleMap);
-        clusterManager.setRenderer(new MarkerClusterRenderer(getContext(), googleMap, clusterManager));
+        ClusterManager<MarkerItem> clusterManager = new ClusterManager<>(mContext, googleMap);
+        clusterManager.setRenderer(new MarkerClusterRenderer(mContext, googleMap, clusterManager));
         googleMap.setOnCameraIdleListener(clusterManager);
         List<MarkerItem> items = getItems();
 
+        Log.d(TAG, "setUpClusterManager: " + items.size());
 
         clusterManager.addItems(items);
         clusterManager.cluster();
@@ -451,14 +459,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void loadFirebaseMapData() {
 
+        Log.d(TAG, "loadFirebaseMapData: called");
+
         markerItemList = new ArrayList<>();
 
         // start point for data access
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Locations");
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Locations");
 
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+
+
+        // inefficient because we have to pull the entire location database anytime there is a change
+
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                // clear the list and start over
+                markerItemList.clear();
 
                 // iterate through marker id's
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
@@ -496,6 +515,70 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+
+
+        /* more efficient way maybe
+
+        databaseReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                children.iterator().next().
+
+                String id = child.getKey();
+                double lat = (double) child.child("latitude").getValue();
+                double lng = (double) child.child("longitude").getValue();
+
+                Log.d(TAG, "get items marker 1:" + lat + ", " + lng + ", " + id);
+                markerItemList.add(new MarkerItem(id, new LatLng(lat, lng)));
+
+
+
+
+                // TODO: find a better place for this
+
+                if (!incomingMarkerID.equals("")) {
+
+                    final String markerID = incomingMarkerID;
+
+                    for (MarkerItem markerItem : getItems()) {
+
+                        Log.d(TAG, "onMapReady: " + markerItem.getID());
+                        if (markerItem.getID().equals(markerID)) {
+                            markerItemClicked(markerItem);
+
+                            break;
+                        }
+                    }
+                }
+
+
+                setUpClusterManager(mMap);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        */
 
 
     }

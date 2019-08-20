@@ -17,3 +17,8 @@
 - in the future create a social network aspect where you can write a bio about yourself and what kind
   of water bottle you use. have some sort of point system based on contributions. have the ability to look
   at someone else's profile and see what they have contributed.
+
+- close listeners when they arent being used
+    https://www.learnhowtoprogram.com/android/data-persistence/firebase-reading-data-and-event-listeners
+
+

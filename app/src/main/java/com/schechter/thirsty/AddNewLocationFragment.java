@@ -189,7 +189,7 @@ public class AddNewLocationFragment extends Fragment {
                     }
 
                     mapFragment.showFABs();
-                    getFragmentManager().popBackStack();
+                    //getFragmentManager().popBackStack();
 
 
                 } else {

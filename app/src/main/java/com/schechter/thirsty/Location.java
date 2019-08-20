@@ -245,6 +245,8 @@ public class Location {
 
         return nearbySearchUrl;
 
+
+
         //return "https://api.myjson.com/bins/1gfxzx";
     }
 
