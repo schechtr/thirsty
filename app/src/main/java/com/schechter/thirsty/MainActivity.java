@@ -43,15 +43,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /** floating action button
-         FloatingActionButton fab = findViewById(R.id.fab);
-         fab.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        .setAction("Action", null).show();
-        }
-        }); **/
-
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -85,7 +76,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
+
         getMenuInflater().inflate(R.menu.main, menu);
+
+        // disable the 3 dot menu
+        MenuItem item = menu.findItem(R.id.action_settings);
+        item.setVisible(false);
+
         return true;
     }
 
@@ -96,12 +94,9 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        //if (id == )
 
-        return super.onOptionsItemSelected(item);
+            return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -125,13 +120,13 @@ public class MainActivity extends AppCompatActivity
 
                 break;
 
-            case R.id.nav_visited:
+            /*case R.id.nav_visited:
 
                 VisitedFragment visitedFragment = new VisitedFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
                         visitedFragment).commit();
 
-                break;
+                break;*/
 
             case R.id.nav_contributed:
 
@@ -174,7 +169,6 @@ public class MainActivity extends AppCompatActivity
         sendMarkerID(mapFragment, markerID);
 
     }
-
 
 
     /*** Communication with IMainActivity Interface ***/

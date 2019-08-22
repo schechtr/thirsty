@@ -12,10 +12,12 @@
             android:id="@+id/nav_starred"
             android:icon="@drawable/ic_star"
             android:title="@string/menu_starred" />
+
+        <!--
         <item
         android:id="@+id/nav_visited"
         android:icon="@drawable/ic_pin_drop"
-        android:title="@string/menu_visited" />
+        android:title="@string/menu_visited" /> -->
         <item
             android:id="@+id/nav_contributed"
             android:icon="@drawable/ic_add_location"
