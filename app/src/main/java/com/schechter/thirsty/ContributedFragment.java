@@ -30,6 +30,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -39,7 +40,7 @@ import java.util.List;
 public class ContributedFragment extends Fragment {
 
     private static final String TAG = "ContributedFragment";
-    
+
     // stuff a recycler item needs
     private List<String> mNearbyPlaceNames;
     private List<String> mVicinities;
@@ -119,13 +120,17 @@ public class ContributedFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 // pull the list of contributed locations
+                mContributed.clear();
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
 
                     if (child.getValue().equals(true)) {
+
                         // then add that location to the list
-                        if (!child.getKey().equals("0"))
+                        if (!child.getKey().equals("0")) {
+                            Log.d(TAG, "onDataChange: " + child.getKey());
                             mContributed.add(child.getKey());
+                        }
                     }
                 }
 
@@ -155,35 +160,31 @@ public class ContributedFragment extends Fragment {
         DatabaseReference reference = FirebaseDatabase.getInstance()
                 .getReference("Locations");
 
-        for (final String markerID : mContributed) {
 
-            reference.child(markerID).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                mLocations.clear();
 
-                    Location location = dataSnapshot.getValue(Location.class);
+                for (final String markerID : mContributed) {
+
+                    Location location = dataSnapshot.child(markerID).getValue(Location.class);
                     mLocations.add(location);
-                    Log.d(TAG, "onDataChange: " + markerID);
-
-                    // a shitty way of handling this async task, but faster than going thru literally every location in the database
-                    // mContributed is 'guaranteed' to not be empty because we already checked for that earlier
-                    if (mLocations.size() == mContributed.size()) {
-                        // proceed
-                        Log.d(TAG, "onDataChange: calling initRecyclerItemContent");
-
-                        initRecyclerItemContent(view);
-
-                    }
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Log.d(TAG, "onCancelled: error fetching location data");
-                }
-            });
+                // remove locations that no longer exist
+                mLocations.removeAll(Collections.singleton(null));
+                initRecyclerItemContent(view);
 
-        }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: error fetching location data");
+            }
+        });
 
 
     }
@@ -211,7 +212,6 @@ public class ContributedFragment extends Fragment {
                     mVicinities.add(location.getVicinity());
                     mMarkerIDs.add(location.getLocation_id());
                     Log.d(TAG, "onSuccess: " + location.getNearby_place_name() + ", " + location.getLocation_id());
-
 
 
                     if (mImageURLs.size() == mLocations.size()) {

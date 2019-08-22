@@ -188,10 +188,6 @@ public class AddNewLocationFragment extends Fragment {
                         
                     }
 
-                    mapFragment.showFABs();
-                    //getFragmentManager().popBackStack();
-
-
                 } else {
                     Log.d(TAG, "onComplete: database upload failure");
                     Toast.makeText(getContext(), "Upload Failed", Toast.LENGTH_SHORT).show();
