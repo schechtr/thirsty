@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,8 +23,11 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class ProfileFragment extends Fragment {
 
-    Button btn_logout;
-    Button btn_login;
+
+    // views
+    private Button btn_logout;
+    private Button btn_login;
+    private RelativeLayout profile_picture_container;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -54,14 +58,29 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    private void setupUI(View view)
-    {
+    private void setupUI(View view) {
         btn_logout = view.findViewById(R.id.btn_logout);
         btn_login = view.findViewById(R.id.btn_login);
+        profile_picture_container = view.findViewById(R.id.top_rl);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
+
+        if (user == null) {
+            btn_logout.setVisibility(View.GONE);
+            btn_login.setVisibility(View.VISIBLE);
+            profile_picture_container.setVisibility(View.GONE);
+
+
+            btn_login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), LoginMasterActivity.class);
+                    startActivity(intent);
+                }
+            });
+        } else {
             btn_logout.setVisibility(View.VISIBLE);
             btn_login.setVisibility(View.GONE);
+            profile_picture_container.setVisibility(View.VISIBLE);
 
             btn_logout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -80,17 +99,6 @@ public class ProfileFragment extends Fragment {
 
         }
 
-        if(user == null) {
-            btn_logout.setVisibility(View.GONE);
-            btn_login.setVisibility(View.VISIBLE);
 
-            btn_login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), LoginMasterActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
     }
 }

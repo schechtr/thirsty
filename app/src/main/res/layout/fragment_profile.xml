@@ -6,9 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
+    <LinearLayout
+        android:id="@+id/profile_message"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:paddingBottom="50dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_water_machine" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textColor="@android:color/black"
+            android:text="@string/profile_message" />
+
+    </LinearLayout>
+
 
     <RelativeLayout
-        android:id="@+id/rl1"
+        android:visibility="gone"
+        android:id="@+id/top_rl"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:background="#F7F7F7">
@@ -52,7 +79,7 @@
     -->
 
     <RelativeLayout
-        android:id="@+id/rl2"
+        android:id="@+id/bottom_rl"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_alignParentBottom="true"
@@ -64,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/login_buttons_margin"
-            android:text="logout"
+            android:text="Sign Out"
             android:textColor="@android:color/white"
             app:backgroundTint="@color/colorPrimary"
             app:cornerRadius="50dp" />
@@ -75,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/login_buttons_margin"
-            android:text="login"
+            android:text="Sign In"
             android:textColor="@android:color/white"
             app:backgroundTint="@color/colorPrimary"
             app:cornerRadius="50dp" />
