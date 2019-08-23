@@ -6,6 +6,13 @@
     tools:context=".ContributedFragment">
 
 
+    <ProgressBar
+        android:id="@+id/contributed_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contributed_recycler_container"
         android:layout_width="match_parent"
@@ -13,7 +20,6 @@
 
 
     </androidx.recyclerview.widget.RecyclerView>
-
 
 
 </FrameLayout>

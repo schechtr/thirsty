@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,11 +53,14 @@ public class StarredFragment extends Fragment {
     private List<String> mMarkerIDs;
 
     private MainActivity mMainActivity;
-    private RecyclerView mRecyclerView;
 
     // data pulled from firebase
     private List<Location> mLocations;
     private List<String> mStarred; // a list of markerID's
+
+    // views
+    private RecyclerView mRecyclerView;
+    private ProgressBar progressBar;
 
 
     public StarredFragment() {
@@ -106,6 +110,10 @@ public class StarredFragment extends Fragment {
         } else {
             final String uid = user.getUid();
 
+            // show progress wheel
+            progressBar = view.findViewById(R.id.starred_progress);
+            progressBar.setVisibility(View.VISIBLE);
+
             // check if the user has any starred locations
             pullFirebaseUserData(view, uid);
 
@@ -116,6 +124,7 @@ public class StarredFragment extends Fragment {
     }
 
     private void pullFirebaseUserData(final View view, final String uid) {
+
 
         DatabaseReference reference = FirebaseDatabase.getInstance()
                 .getReference("Users").child(uid).child("starred");
@@ -141,6 +150,7 @@ public class StarredFragment extends Fragment {
                     pullFirebaseLocationData(view);
                 } else {
                     /* TODO: what now */
+                    progressBar.setVisibility(View.GONE);
                     Log.d(TAG, "onDataChange: this user has no contributions");
                 }
 
@@ -149,6 +159,7 @@ public class StarredFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled: error fetching user data");
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -184,6 +195,7 @@ public class StarredFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled: error fetching location data");
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -218,6 +230,8 @@ public class StarredFragment extends Fragment {
                     if (mImageURLs.size() == mLocations.size()) {
                         initRecyclerView(view);
                     }
+
+                    progressBar.setVisibility(View.GONE);
 
 
                 }

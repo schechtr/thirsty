@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,11 +49,14 @@ public class ContributedFragment extends Fragment {
     private List<String> mMarkerIDs;
 
     private MainActivity mMainActivity;
-    private RecyclerView mRecyclerView;
 
     // data pulled from firebase
     private List<Location> mLocations;
     private List<String> mContributed; // a list of markerID's
+
+    // views
+    private   ProgressBar progressBar;
+    private RecyclerView mRecyclerView;
 
 
     public ContributedFragment() {
@@ -70,12 +74,12 @@ public class ContributedFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_contributed, container, false);
     }
@@ -83,6 +87,9 @@ public class ContributedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        progressBar = view.findViewById(R.id.contributed_progress);
+        progressBar.setVisibility(View.GONE);
 
         // if user is not logged in, prompt them to login
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -101,6 +108,10 @@ public class ContributedFragment extends Fragment {
         } else {
             final String uid = user.getUid();
 
+            // show progress wheel
+            progressBar = view.findViewById(R.id.contributed_progress);
+            progressBar.setVisibility(View.VISIBLE);
+
             // check if the user has any contributed locations
             pullFirebaseUserData(view, uid);
 
@@ -111,6 +122,7 @@ public class ContributedFragment extends Fragment {
     }
 
     private void pullFirebaseUserData(final View view, final String uid) {
+
 
         DatabaseReference reference = FirebaseDatabase.getInstance()
                 .getReference("Users").child(uid).child("contributed");
@@ -217,6 +229,9 @@ public class ContributedFragment extends Fragment {
                     if (mImageURLs.size() == mLocations.size()) {
                         initRecyclerView(view);
                     }
+
+                    progressBar.setVisibility(View.GONE);
+
 
                 }
             }).addOnFailureListener(new OnFailureListener() {

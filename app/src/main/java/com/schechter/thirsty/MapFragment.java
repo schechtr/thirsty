@@ -77,12 +77,10 @@ import static com.android.volley.VolleyLog.TAG;
 
 public class MapFragment extends BaseFragment implements OnMapReadyCallback {
 
-
     // member variables
     private GoogleMap mMap;
     private Place mPlace;
     private FusedLocationProviderClient mFusedLocationClient;
-    private PlacesClient placesClient;
     private boolean mFirstRequest; // sketchy way of detecting the first request for locationCallback
     private List<MarkerItem> mMarkerItems;
 
@@ -137,7 +135,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         getChildFragmentManager().popBackStack();
     }
 
@@ -472,7 +470,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback {
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Locations");
 
 
-
         // inefficient because we have to pull the entire location database anytime there is a change
 
 
@@ -660,7 +657,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback {
             }
         }
     }
-
 
 
 }
