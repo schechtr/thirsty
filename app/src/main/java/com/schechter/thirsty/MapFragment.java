@@ -75,7 +75,7 @@ import java.util.List;
 import static com.android.volley.VolleyLog.TAG;
 
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends BaseFragment implements OnMapReadyCallback {
 
 
     // member variables
@@ -134,6 +134,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (bundle != null) {
             incomingMarkerID = bundle.getString(getString(R.string.marker_id_key));
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        getChildFragmentManager().popBackStack();
     }
 
     /*** limit the amount of computation done in this method, and use onViewCreated for the rest ***/
@@ -655,6 +660,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         }
     }
+
 
 
 }

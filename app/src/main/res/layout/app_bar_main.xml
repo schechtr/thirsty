@@ -23,6 +23,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/btn_toolbar_profile"
                     android:layout_marginRight="20dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"

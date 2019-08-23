@@ -26,6 +26,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
+import android.widget.ImageView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, IMainActivity {
@@ -41,6 +44,17 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        ImageView btn_profile = findViewById(R.id.btn_toolbar_profile);
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ProfileFragment profileFragment = new ProfileFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
+                        profileFragment).addToBackStack("").commit();
+            }
+        });
+
+
         setSupportActionBar(toolbar);
 
 
@@ -62,16 +76,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onBackPressed() {
-
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-            getSupportFragmentManager().popBackStack();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,9 +98,9 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //if (id == )
+        Log.d(TAG, "onOptionsItemSelected: " + id);
 
-            return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -108,7 +112,7 @@ public class MainActivity extends AppCompatActivity
 
                 MapFragment mapFragment = new MapFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
-                        mapFragment).commit();
+                        mapFragment).addToBackStack(null).commit();
 
                 break;
 
@@ -116,7 +120,7 @@ public class MainActivity extends AppCompatActivity
 
                 StarredFragment starredFragment = new StarredFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
-                        starredFragment).commit();
+                        starredFragment).addToBackStack(null).commit();
 
                 break;
 
@@ -124,7 +128,7 @@ public class MainActivity extends AppCompatActivity
 
                 VisitedFragment visitedFragment = new VisitedFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
-                        visitedFragment).commit();
+                        visitedFragment).addToBackStack(null).commit();
 
                 break;*/
 
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity
 
                 ContributedFragment contributedFragment = new ContributedFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
-                        contributedFragment).commit();
+                        contributedFragment).addToBackStack(null).commit();
 
                 break;
 
@@ -140,7 +144,7 @@ public class MainActivity extends AppCompatActivity
 
                 ProfileFragment profileFragment = new ProfileFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
-                        profileFragment).commit();
+                        profileFragment).addToBackStack(null).commit();
 
                 break;
 
@@ -164,7 +168,7 @@ public class MainActivity extends AppCompatActivity
 
         MapFragment mapFragment = new MapFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
-                mapFragment).commit();
+                mapFragment).addToBackStack(null).commit();
 
         sendMarkerID(mapFragment, markerID);
 
@@ -215,6 +219,28 @@ public class MainActivity extends AppCompatActivity
 
         doFragmentTransactionWithDouble(fragment, keys, values);
 
+    }
+
+
+    private void tellFragmentsBackPressed(){
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for(Fragment f : fragments){
+            if(f instanceof BaseFragment) {
+                Log.d(TAG, "tellFragmentsBackPressed: called onbackpressed");
+                ((BaseFragment) f).onBackPressed();
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            getSupportFragmentManager().popBackStack();
+            tellFragmentsBackPressed();
+        }
     }
 
 }
