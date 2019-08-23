@@ -1,6 +1,6 @@
 package com.schechter.thirsty;
 
-public interface OnBackPressed {
+public interface IOnBackPressed {
 
     void onBackPressed();
 }

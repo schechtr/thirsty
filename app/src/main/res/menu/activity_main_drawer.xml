@@ -6,11 +6,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_map"
-            android:icon="@drawable/ic_map"
+            android:icon="@drawable/ic_nav_map"
             android:title="@string/menu_map" />
         <item
             android:id="@+id/nav_starred"
-            android:icon="@drawable/ic_star"
+            android:icon="@drawable/ic_nav_starred"
             android:title="@string/menu_starred" />
 
         <!--
@@ -20,12 +20,12 @@
         android:title="@string/menu_visited" /> -->
         <item
             android:id="@+id/nav_contributed"
-            android:icon="@drawable/ic_add_location"
+            android:icon="@drawable/ic_nav_contributed"
             android:title="@string/menu_contributed" />
 
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_profile_circle"
+            android:icon="@drawable/ic_nav_user"
             android:title="@string/menu_profile" />
     </group>
 
@@ -33,16 +33,16 @@
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_nav_share"
                 android:title="@string/menu_share" />
             // needs a better icon
             <item
                 android:id="@+id/nav_rate"
-                android:icon="@drawable/ic_star_outline"
+                android:icon="@drawable/ic_nav_rate"
                 android:title="@string/menu_rate" />
             <item
                 android:id="@+id/nav_contact_us"
-                android:icon="@drawable/ic_contact_us"
+                android:icon="@drawable/ic_nav_contact"
                 android:title="@string/menu_contact_us" />
 
         </menu>

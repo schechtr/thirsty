@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -61,6 +62,7 @@ public class StarredFragment extends Fragment {
     // views
     private RecyclerView mRecyclerView;
     private ProgressBar progressBar;
+    private LinearLayout starredMessage;
 
 
     public StarredFragment() {
@@ -93,9 +95,19 @@ public class StarredFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        starredMessage = view.findViewById(R.id.starred_message);
+        starredMessage.setVisibility(View.GONE);
 
+        progressBar = view.findViewById(R.id.starred_progress);
+        progressBar.setVisibility(View.GONE);
+
+
+        // if user is not logged in, prompt them to login
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
+
+            starredMessage.setVisibility(View.VISIBLE);
+
             Snackbar snackbar = Snackbar.make(view, "Sign In to view starred", Snackbar.LENGTH_LONG)
                     .setAction("Sign In", new View.OnClickListener() {
                         @Override
@@ -111,7 +123,6 @@ public class StarredFragment extends Fragment {
             final String uid = user.getUid();
 
             // show progress wheel
-            progressBar = view.findViewById(R.id.starred_progress);
             progressBar.setVisibility(View.VISIBLE);
 
             // check if the user has any starred locations
@@ -151,7 +162,8 @@ public class StarredFragment extends Fragment {
                 } else {
                     /* TODO: what now */
                     progressBar.setVisibility(View.GONE);
-                    Log.d(TAG, "onDataChange: this user has no contributions");
+                    starredMessage.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "onDataChange: this user has no starred locations");
                 }
 
             }

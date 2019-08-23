@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -56,6 +57,7 @@ public class ContributedFragment extends Fragment {
 
     // views
     private   ProgressBar progressBar;
+    private LinearLayout contributedMessage;
     private RecyclerView mRecyclerView;
 
 
@@ -91,9 +93,15 @@ public class ContributedFragment extends Fragment {
         progressBar = view.findViewById(R.id.contributed_progress);
         progressBar.setVisibility(View.GONE);
 
+        contributedMessage = view.findViewById(R.id.contributed_message);
+        contributedMessage.setVisibility(View.GONE);
+
         // if user is not logged in, prompt them to login
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
+
+            contributedMessage.setVisibility(View.VISIBLE);
+
             Snackbar snackbar = Snackbar.make(view, "Sign In to view contributed", Snackbar.LENGTH_LONG)
                     .setAction("Sign In", new View.OnClickListener() {
                         @Override
@@ -151,6 +159,8 @@ public class ContributedFragment extends Fragment {
                     pullFirebaseLocationData(view);
                 } else {
                     /* TODO: what now */
+                    progressBar.setVisibility(View.GONE);
+                    contributedMessage.setVisibility(View.VISIBLE);
                     Log.d(TAG, "onDataChange: this user has no contributions");
                 }
 

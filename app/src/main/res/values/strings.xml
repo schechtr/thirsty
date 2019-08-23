@@ -45,6 +45,10 @@
     <string name="image_extension">.jpg</string>
 
 
+    <string name="contributed_message">When you contribute a new location it will show up here.</string>
+    <string name="starred_message">When you star a location it will show up here.</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
