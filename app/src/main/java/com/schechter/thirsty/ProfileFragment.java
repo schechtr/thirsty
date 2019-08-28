@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,6 +29,7 @@ public class ProfileFragment extends Fragment {
     private Button btn_logout;
     private Button btn_login;
     private RelativeLayout profile_picture_container;
+    private LinearLayout profile_message;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -62,12 +64,14 @@ public class ProfileFragment extends Fragment {
         btn_logout = view.findViewById(R.id.btn_logout);
         btn_login = view.findViewById(R.id.btn_login);
         profile_picture_container = view.findViewById(R.id.top_rl);
+        profile_message = view.findViewById(R.id.profile_message);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null) {
             btn_logout.setVisibility(View.GONE);
             btn_login.setVisibility(View.VISIBLE);
             profile_picture_container.setVisibility(View.GONE);
+            profile_message.setVisibility(view.VISIBLE);
 
 
             btn_login.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +85,7 @@ public class ProfileFragment extends Fragment {
             btn_logout.setVisibility(View.VISIBLE);
             btn_login.setVisibility(View.GONE);
             profile_picture_container.setVisibility(View.VISIBLE);
+            profile_message.setVisibility(view.GONE);
 
             btn_logout.setOnClickListener(new View.OnClickListener() {
                 @Override
