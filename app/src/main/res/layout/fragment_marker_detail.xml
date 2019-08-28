@@ -13,75 +13,113 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:gravity="center_horizontal"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/near_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5sp"
-            android:text="near: "
-            android:textColor="@color/colorPrimary"
-            android:textSize="15sp"
-            android:textStyle="italic"
-
-            />
-
-        <TextView
-            android:id="@+id/near_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/near_label"
-            android:padding="5sp"
-            android:text=""
-            android:textSize="15sp"
-             />
-
-        <TextView
-            android:id="@+id/address_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/near_label"
-            android:padding="5sp"
-            android:text=""
-            android:visibility="gone"
-            android:textSize="15sp"
-            android:textStyle="italic" />
-
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@android:color/white">
 
-
-        <ImageView
-            android:id="@+id/detail_background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:background="@color/thatOneGrey"
-            android:scaleType="fitXY">
-
-        </ImageView>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/marker_detail_photo"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="20dp"
             android:src="@mipmap/fountain"
             app:civ_border_color="@android:color/darker_gray"
-            app:civ_border_width="2dp"
+            app:civ_border_width="2dp" />
 
-            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/marker_detail_photo"
+
+            >
+
+            <TextView
+
+                android:id="@+id/near_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5sp"
+                android:text="near: "
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                android:visibility="gone"
+
+                />
+
+            <TextView
+                android:id="@+id/near_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:hint="loading..."
+                android:padding="5sp"
+                android:text=""
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/address_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/near_value"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="0dp"
+                android:padding="5sp"
+                android:text=""
+                android:textSize="15sp"
+                android:textStyle="italic" />
+
+
+        </RelativeLayout>
 
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="15sp">
+
+        <TextView
+            android:id="@+id/contributed_by_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="5sp"
+            android:text="contributed by:"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginLeft="5dp"
+            android:id="@+id/contributed_by_pic"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/contributed_by_label"
+            android:src="@drawable/ic_nav_user" />
+
+        <TextView
+            android:id="@+id/contributed_by_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/contributed_by_pic"
+            android:hint="loading..."
+            android:padding="5sp" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/thatOneGrey" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -108,12 +146,18 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/thatOneGrey" />
 
+    <!--
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/thatOneGrey"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:visibility="gone">
 
 
         <TextView
@@ -157,6 +201,7 @@
 
 
     </RelativeLayout>
+    -->
 
     <RelativeLayout
         android:layout_width="match_parent"
