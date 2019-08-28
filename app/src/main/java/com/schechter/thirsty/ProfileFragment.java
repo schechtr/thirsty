@@ -63,7 +63,7 @@ public class ProfileFragment extends Fragment {
     private void setupUI(View view) {
         btn_logout = view.findViewById(R.id.btn_logout);
         btn_login = view.findViewById(R.id.btn_login);
-        profile_picture_container = view.findViewById(R.id.top_rl);
+        profile_picture_container = view.findViewById(R.id.profile_container);
         profile_message = view.findViewById(R.id.profile_message);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 

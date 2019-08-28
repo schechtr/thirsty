@@ -21,3 +21,10 @@
 - close listeners when they arent being used
     https://www.learnhowtoprogram.com/android/data-persistence/firebase-reading-data-and-event-listeners
 
+- Bug: back button and loading content
+    to produce: open a fragment from the nav drawer, then press the profile button on the app bar,
+    now press the back button. the fragment won't load its content.
+
+- Minor Bug: pressing the profile button while already on the profile screen should be disabled
+
+- Clicking the location in someones profile should load that location in the map
