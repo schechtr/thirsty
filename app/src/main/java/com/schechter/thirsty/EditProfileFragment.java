@@ -63,7 +63,7 @@ public class EditProfileFragment extends Fragment {
         if (user == null)
             getFragmentManager().popBackStack();
 
-        pullFireBaseUserData(view);
+        pullFirebaseUserData(view);
 
     }
 
@@ -160,7 +160,7 @@ public class EditProfileFragment extends Fragment {
 
     }
 
-    private void pullFireBaseUserData(final View view) {
+    private void pullFirebaseUserData(final View view) {
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference().child("Users").child(user.getUid());

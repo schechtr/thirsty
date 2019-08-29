@@ -94,24 +94,24 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/profile_content_top"
                 android:layout_marginLeft="30dp"
-                android:hint="Andrew Schechter"
+                android:hint="name"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/home_location"
+                android:id="@+id/profile_hometown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/profile_name"
                 android:layout_marginLeft="30dp"
-                android:hint="Mission Viejo, California" />
+                android:hint="location" />
 
             <TextView
-                android:id="@+id/bio"
+                android:id="@+id/profile_bio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/home_location"
+                android:layout_below="@id/profile_hometown"
                 android:layout_marginLeft="30dp"
-                android:hint="nalgene > hydroflask" />
+                android:hint="bio" />
 
 
         </RelativeLayout>
