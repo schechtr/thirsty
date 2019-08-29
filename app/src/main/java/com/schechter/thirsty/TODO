@@ -28,3 +28,4 @@
 - Minor Bug: pressing the profile button while already on the profile screen should be disabled
 
 - Clicking the location in someones profile should load that location in the map
+- that location can be chosen using this https://github.com/mukeshsolanki/Google-Places-AutoComplete-EditText

@@ -28,8 +28,9 @@ public class ProfileFragment extends Fragment {
     // views
     private Button btn_logout;
     private Button btn_login;
-    private RelativeLayout profile_picture_container;
+    private RelativeLayout profile_content_container;
     private LinearLayout profile_message;
+    private Button btn_edit_profile;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -61,16 +62,17 @@ public class ProfileFragment extends Fragment {
 
 
     private void setupUI(View view) {
+        btn_edit_profile = view.findViewById(R.id.btn_edit_profile);
         btn_logout = view.findViewById(R.id.btn_logout);
         btn_login = view.findViewById(R.id.btn_login);
-        profile_picture_container = view.findViewById(R.id.profile_container);
+        profile_content_container = view.findViewById(R.id.profile_container);
         profile_message = view.findViewById(R.id.profile_message);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null) {
             btn_logout.setVisibility(View.GONE);
             btn_login.setVisibility(View.VISIBLE);
-            profile_picture_container.setVisibility(View.GONE);
+            profile_content_container.setVisibility(View.GONE);
             profile_message.setVisibility(view.VISIBLE);
 
 
@@ -84,7 +86,7 @@ public class ProfileFragment extends Fragment {
         } else {
             btn_logout.setVisibility(View.VISIBLE);
             btn_login.setVisibility(View.GONE);
-            profile_picture_container.setVisibility(View.VISIBLE);
+            profile_content_container.setVisibility(View.VISIBLE);
             profile_message.setVisibility(view.GONE);
 
             btn_logout.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +101,17 @@ public class ProfileFragment extends Fragment {
                     getFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
                             mapFragment).commit();
 
+                }
+            });
+
+
+            btn_edit_profile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    EditProfileFragment editProfileFragment = new EditProfileFragment();
+                    getFragmentManager().beginTransaction().replace(R.id.contentMainLayout,
+                            editProfileFragment).addToBackStack(null).commit();
                 }
             });
 
