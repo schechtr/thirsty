@@ -128,6 +128,35 @@ public class EditProfileFragment extends Fragment {
 
     private void updateFirebaseUserData() {
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference().child("Users").child(user.getUid());
+
+        String newName = name.getText().toString();
+        String newBio = bio.getText().toString();
+        String newCity = city.getText().toString();
+        String newState = state.getText().toString();
+        String newCountry = country.getText().toString();
+
+        if(!nameValue.equals(newName)) {
+            databaseReference.child("name").setValue(newName);
+        }
+
+        if(!bioValue.equals(newBio)) {
+            databaseReference.child("bio").setValue(newBio);
+        }
+
+        if(!cityValue.equals(newCity)) {
+            databaseReference.child("city").setValue(newCity);
+        }
+
+        if(!stateValue.equals(newState)) {
+            databaseReference.child("state").setValue(newState);
+        }
+
+        if(!countryValue.equals(newCountry)) {
+            databaseReference.child("country").setValue(newCountry);
+        }
+
 
     }
 
